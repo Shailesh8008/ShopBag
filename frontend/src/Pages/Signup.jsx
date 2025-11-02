@@ -1,12 +1,21 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Modal from "../components/Modal";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Signup({ isOpen, setIsOpen }) {
-  const location = useLocation();
+  const [form, setForm] = useState({
+    fname: "",
+    lname: "",
+    email: "",
+    pass1: "",
+    pass2: "",
+  });
   const [isPass, setIsPass] = useState(false);
-  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.id]: e.target.value });
+  };
 
   return (
     <Modal
@@ -17,11 +26,7 @@ export default function Signup({ isOpen, setIsOpen }) {
         <div className="text-center">
           <p>
             Have an account?{" "}
-            <Link
-              to={"/signin"}
-              state={location}
-              className="text-blue-700 hover:underline"
-            >
+            <Link to={"/signin"} className="text-blue-700 hover:underline">
               Sign In
             </Link>
           </p>
@@ -32,6 +37,7 @@ export default function Signup({ isOpen, setIsOpen }) {
         className="mb-2 mt-4 w-full space-y-2.5"
         onSubmit={(e) => {
           e.preventDefault();
+          console.log(form)
         }}
       >
         <div className="flex gap-2 sm:gap-3">
@@ -42,6 +48,8 @@ export default function Signup({ isOpen, setIsOpen }) {
             <input
               id="fname"
               type="text"
+              value={form.fname}
+              onChange={handleChange}
               placeholder="First Name"
               className="w-full mt-1 px-3 py-2 border border-purple-200 rounded focus:outline-none focus:ring-1 focus:ring-purple-600"
             />
@@ -53,6 +61,8 @@ export default function Signup({ isOpen, setIsOpen }) {
             <input
               id="lname"
               type="text"
+              value={form.lname}
+              onChange={handleChange}
               placeholder="Last Name"
               className="w-full mt-1 px-3 py-2 border border-purple-200 rounded focus:outline-none focus:ring-1 focus:ring-purple-600"
             />
@@ -65,6 +75,8 @@ export default function Signup({ isOpen, setIsOpen }) {
           <input
             id="email"
             type="text"
+            value={form.email}
+            onChange={handleChange}
             placeholder="Email/phone"
             className="w-full mt-1 px-3 py-2 border border-purple-200 rounded focus:outline-none focus:ring-1 focus:ring-purple-600"
           />
@@ -77,6 +89,8 @@ export default function Signup({ isOpen, setIsOpen }) {
             <input
               id="pass1"
               type={isPass ? "password" : "text"}
+              value={form.pass}
+              onChange={handleChange}
               placeholder="Password"
               className="w-full mt-1 pr-8 pl-3 py-2 border border-purple-200 rounded focus:outline-none focus:ring-1 focus:ring-purple-600"
             />
@@ -89,7 +103,6 @@ export default function Signup({ isOpen, setIsOpen }) {
               <FaEye
                 className="absolute top-4 right-3 cursor-pointer text-lg hover:text-purple-600 text-gray-700"
                 onClick={(e) => {
-                  e.preventDefault();
                   setIsPass(!isPass);
                 }}
               />
@@ -104,18 +117,14 @@ export default function Signup({ isOpen, setIsOpen }) {
             <input
               id="pass2"
               type={isPass ? "password" : "text"}
+              value={form.pass2}
+              onChange={handleChange}
               placeholder="Password"
               className="w-full mt-1 pr-8 pl-3 py-2 border border-purple-200 rounded focus:outline-none focus:ring-1 focus:ring-purple-600"
             />
           </div>
         </div>
-        <button
-          onClick={(e) => {
-            setIsOpen(false);
-            navigate(-1);
-          }}
-          className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 w-full cursor-pointer transition active:bg-purple-800"
-        >
+        <button className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 mt-4 w-full cursor-pointer transition active:bg-purple-800">
           Sign Up
         </button>
       </form>

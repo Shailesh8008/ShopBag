@@ -5,32 +5,17 @@ import CartItems from "../components/CartItems";
 import Modal from "../components/Modal";
 
 export default function Cart({ isOpen, setIsOpen }) {
-  
-
   return (
     <Modal
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       header={<h1 className="font-semibold text-center text-xl mb-5">Cart</h1>}
-      footer={""}
+      footer={""} height={"3/4"}
     >
       <ul className="divide-y-1 divide-gray-200">
-        <CartItems
-          pname={"Self-care Kit"}
-          img={productImg}
-          price={25}
-          quant={quant}
-          setQuant={setQuant}
-          pid={v4()}
-        />
-        <CartItems
-          pname={"Self-care Kit"}
-          img={productImg}
-          price={25}
-          quant={quant}
-          setQuant={setQuant}
-          pid={v4()}
-        />
+        {[1,2,3,4,5,6,7,8,9].map((e)=>{
+          return (<CartItems pname={"Self-care Kit"} img={productImg} price={25} />)
+        })}
       </ul>
     </Modal>
   );

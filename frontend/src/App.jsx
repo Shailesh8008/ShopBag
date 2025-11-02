@@ -50,11 +50,14 @@ export default function App() {
             </>
           }
         />
-      </Routes>
-      <Routes>
         <Route
           path="/cart"
-          element={<><Cart isOpen={isOpen} setIsOpen={setIsOpen} /><HomePage/></>}
+          element={
+            <>
+              <Cart isOpen={isOpen} setIsOpen={setIsOpen} />
+              <HomePage />
+            </>
+          }
         />
       </Routes>
       <Footer />

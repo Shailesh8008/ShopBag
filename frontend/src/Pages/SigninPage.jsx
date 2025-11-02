@@ -1,12 +1,11 @@
 import { useState } from "react";
 import Modal from "../components/Modal";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function SigninPage({ isOpen, setIsOpen }) {
-  const location = useLocation();
   const [isPass, setIsPass] = useState(false);
-  const navigate = useNavigate();
+
   return (
     <Modal
       isOpen={isOpen}
@@ -16,11 +15,7 @@ export default function SigninPage({ isOpen, setIsOpen }) {
         <div className="text-center">
           <p>
             Don't have an account?{" "}
-            <Link
-              to={"/signup"}
-              state={location}
-              className="text-blue-700 hover:underline"
-            >
+            <Link to={"/signup"} className="text-blue-700 hover:underline">
               Sign up
             </Link>
           </p>
@@ -65,20 +60,13 @@ export default function SigninPage({ isOpen, setIsOpen }) {
               <FaEye
                 className="absolute top-4 right-3 cursor-pointer text-lg hover:text-purple-600 text-gray-700"
                 onClick={(e) => {
-                  e.preventDefault();
                   setIsPass(!isPass);
                 }}
               />
             )}
           </div>
         </div>
-        <button
-          onClick={(e) => {
-            setIsOpen(false);
-            navigate(-1);
-          }}
-          className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 w-full cursor-pointer transition active:bg-purple-800"
-        >
+        <button className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 w-full cursor-pointer transition active:bg-purple-800">
           Sign In
         </button>
       </form>
