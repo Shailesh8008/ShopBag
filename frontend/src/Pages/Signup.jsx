@@ -11,10 +11,29 @@ export default function Signup({ isOpen, setIsOpen }) {
     pass1: "",
     pass2: "",
   });
+  const [error, setError] = useState(false);
   const [isPass, setIsPass] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
+  };
+  const handleForm = async (e) => {
+    e.preventDefault();
+    if (form.pass1 !== form.pass2) return setError(true);
+
+    try {
+      const res = await fetch("/api/reg", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        return console.log(data.message);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   return (
@@ -33,13 +52,7 @@ export default function Signup({ isOpen, setIsOpen }) {
         </div>
       }
     >
-      <form
-        className="mb-2 mt-4 w-full space-y-2.5"
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log(form)
-        }}
-      >
+      <form className="mb-2 mt-4 w-full space-y-2.5" onSubmit={handleForm}>
         <div className="flex gap-2 sm:gap-3">
           <div className="flex-1">
             <label htmlFor="fname" className="text-lg block ml-0.5">
@@ -83,7 +96,14 @@ export default function Signup({ isOpen, setIsOpen }) {
         </div>
         <div>
           <label htmlFor="pass1" className="text-lg">
-            Password
+            Password{" "}
+            {error ? (
+              <span className="ml-1 text-sm text-red-700">
+                Please enter same passwords
+              </span>
+            ) : (
+              ""
+            )}
           </label>
           <div className="relative">
             <input
@@ -111,7 +131,14 @@ export default function Signup({ isOpen, setIsOpen }) {
         </div>
         <div>
           <label htmlFor="pass2" className="text-lg">
-            Confirm Password
+            Confirm Password{" "}
+            {error ? (
+              <span className="ml-1 text-sm text-red-700">
+                Please enter same passwords
+              </span>
+            ) : (
+              ""
+            )}
           </label>
           <div className="relative">
             <input
