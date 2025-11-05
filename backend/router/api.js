@@ -6,5 +6,6 @@ apiRouter.get("/", (req, res) => {
 });
 
 apiRouter.post("/api/reg", userController.reg);
+apiRouter.post("/api/login", userController.login);
 
 module.exports = apiRouter;

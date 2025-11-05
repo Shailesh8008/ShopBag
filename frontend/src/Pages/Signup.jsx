@@ -16,6 +16,7 @@ export default function Signup({ isOpen, setIsOpen }) {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
+    setError(false);
   };
   const handleForm = async (e) => {
     e.preventDefault();

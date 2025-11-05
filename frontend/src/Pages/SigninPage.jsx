@@ -5,6 +5,44 @@ import { Link } from "react-router-dom";
 
 export default function SigninPage({ isOpen, setIsOpen }) {
   const [isPass, setIsPass] = useState(false);
+  const [form, setForm] = useState({
+    email: "",
+    pass: "",
+  });
+  const [error, setError] = useState({ email: false, pass: false });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!form.email || !form.pass) {
+      return setError({
+        email: form.email ? false : true,
+        pass: form.pass ? false : true,
+      });
+    }
+
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        return console.log(data.message);
+      }
+      console.log(data.message)
+    } catch (error) {}
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.id]: e.target.value });
+
+    setError({
+      ...error,
+      [e.target.id]: false,
+    });
+  };
 
   return (
     <Modal
@@ -22,19 +60,21 @@ export default function SigninPage({ isOpen, setIsOpen }) {
         </div>
       }
     >
-      <form
-        className="mb-2 mt-4 w-full space-y-2.5"
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <form className="mb-2 mt-4 w-full space-y-2.5" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email" className="text-lg">
             Email or Mobile number
+            {error.email ? (
+              <span className="text-red-600 ml-2 text-sm">Required *</span>
+            ) : (
+              ""
+            )}
           </label>
           <input
             id="email"
             type="text"
+            value={form.email}
+            onChange={handleChange}
             placeholder="Email/phone"
             className="w-full mt-1 px-3 py-2 border border-purple-200 rounded focus:outline-none focus:ring-1 focus:ring-purple-600"
           />
@@ -42,11 +82,18 @@ export default function SigninPage({ isOpen, setIsOpen }) {
         <div>
           <label htmlFor="pass" className="text-lg">
             Password
+            {error.pass ? (
+              <span className="text-red-600 ml-2 text-sm">Required *</span>
+            ) : (
+              ""
+            )}
           </label>
           <div className="relative">
             <input
               id="pass"
               type={isPass ? "password" : "text"}
+              value={form.pass}
+              onChange={handleChange}
               placeholder="Password"
               className="w-full mt-1 pr-8 pl-3 py-2 border border-purple-200 rounded focus:outline-none focus:ring-1 focus:ring-purple-600"
             />

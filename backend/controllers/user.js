@@ -1,4 +1,5 @@
 const model = require("../models/user");
+const bcrypt = require("bcrypt");
 
 const reg = async (req, res) => {
   try {
@@ -10,17 +11,16 @@ const reg = async (req, res) => {
       });
     }
 
-    // Fix: await the async DB call
     const isEmailExists = await model.findOne({ email: email });
     if (isEmailExists) {
       return res.json({ ok: false, message: "Email already Exists!" });
     }
-
+    const hashedPassword = await bcrypt.hash(pass1, 10);
     const record = new model({
       fname: fname,
       lname: lname,
       email: email,
-      pass: pass1,
+      pass: hashedPassword,
     });
 
     await record.save();
@@ -33,4 +33,27 @@ const reg = async (req, res) => {
   }
 };
 
-module.exports = { reg };
+const login = async (req, res) => {
+  try {
+    const { email, pass } = req.body;
+
+    const emailExists = await model.findOne({ email: email });
+    if (!emailExists) {
+      return res.json({ ok: false, message: "Email does not exist!" });
+    }
+
+    bcrypt.compare(pass, emailExists.pass, (err, result) => {
+      if (err) {
+        console.error("Error comparing passwords:", err);
+        return false;
+      }
+      return result
+        ? res.json({ ok: true, message: "Login Successful!" })
+        : res.json({ ok: false, message: "Invalid Password!" });
+    });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+
+module.exports = { reg, login };
