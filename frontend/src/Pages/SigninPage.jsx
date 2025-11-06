@@ -1,9 +1,12 @@
 import { useState } from "react";
 import Modal from "../components/Modal";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export default function SigninPage({ isOpen, setIsOpen }) {
+  const navigate = useNavigate();
+
   const [isPass, setIsPass] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -29,9 +32,10 @@ export default function SigninPage({ isOpen, setIsOpen }) {
       });
       const data = await res.json();
       if (!data.ok) {
-        return console.log(data.message);
+        return toast.error(data.message);
       }
-      console.log(data.message)
+      toast.success(data.message);
+      navigate("/");
     } catch (error) {}
   };
 
