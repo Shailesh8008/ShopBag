@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import Modal from "../components/Modal";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -11,16 +12,34 @@ export default function Signup({ isOpen, setIsOpen }) {
     pass1: "",
     pass2: "",
   });
-  const [error, setError] = useState(false);
+  const [error, setError] = useState({
+    fname: false,
+    lname: false,
+    email: false,
+    pass: false,
+    pass1: false,
+    pass2: false,
+  });
   const [isPass, setIsPass] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
-    setError(false);
+    setError({ ...error, [e.target.id]: false, pass: false });
   };
   const handleForm = async (e) => {
     e.preventDefault();
-    if (form.pass1 !== form.pass2) return setError(true);
+
+    if (!form.fname || !form.email || !form.pass1 || !form.pass2) {
+      return setError({
+        ...error,
+        fname: form.fname ? false : true,
+        email: form.email ? false : true,
+        pass1: form.pass1 ? false : true,
+        pass2: form.pass2 ? false : true,
+      });
+    }
+
+    if (form.pass1 !== form.pass2) return setError({ ...error, pass: true });
 
     try {
       const res = await fetch("/api/reg", {
@@ -30,8 +49,16 @@ export default function Signup({ isOpen, setIsOpen }) {
       });
       const data = await res.json();
       if (!data.ok) {
-        return console.log(data.message);
+        return toast.error(data.message || "Some error occurred");
       }
+      toast.success(data.message || "Registered Successfully");
+      setForm({
+        fname: "",
+        lname: "",
+        email: "",
+        pass1: "",
+        pass2: "",
+      });
     } catch (error) {
       console.log("error: ", error);
     }
@@ -57,7 +84,12 @@ export default function Signup({ isOpen, setIsOpen }) {
         <div className="flex gap-2 sm:gap-3">
           <div className="flex-1">
             <label htmlFor="fname" className="text-lg block ml-0.5">
-              First Name
+              First Name{" "}
+              {error.fname ? (
+                <span className="ml-1 text-sm text-red-600">Required *</span>
+              ) : (
+                ""
+              )}
             </label>
             <input
               id="fname"
@@ -84,7 +116,12 @@ export default function Signup({ isOpen, setIsOpen }) {
         </div>
         <div>
           <label htmlFor="email" className="text-lg">
-            Email or Mobile number
+            Email or Mobile number{" "}
+            {error.email ? (
+              <span className="ml-1 text-sm text-red-600">Required *</span>
+            ) : (
+              ""
+            )}
           </label>
           <input
             id="email"
@@ -98,19 +135,19 @@ export default function Signup({ isOpen, setIsOpen }) {
         <div>
           <label htmlFor="pass1" className="text-lg">
             Password{" "}
-            {error ? (
-              <span className="ml-1 text-sm text-red-700">
-                Please enter same passwords
-              </span>
-            ) : (
-              ""
-            )}
+            <span className="ml-1 text-sm text-red-600">
+              {error.pass1
+                ? "Required *"
+                : error.pass
+                ? "Please enter same passwords"
+                : ""}
+            </span>
           </label>
           <div className="relative">
             <input
               id="pass1"
               type={isPass ? "password" : "text"}
-              value={form.pass}
+              value={form.pass1}
               onChange={handleChange}
               placeholder="Password"
               className="w-full mt-1 pr-8 pl-3 py-2 border border-purple-200 rounded focus:outline-none focus:ring-1 focus:ring-purple-600"
@@ -133,13 +170,13 @@ export default function Signup({ isOpen, setIsOpen }) {
         <div>
           <label htmlFor="pass2" className="text-lg">
             Confirm Password{" "}
-            {error ? (
-              <span className="ml-1 text-sm text-red-700">
-                Please enter same passwords
-              </span>
-            ) : (
-              ""
-            )}
+            <span className="ml-1 text-sm text-red-600">
+              {error.pass2
+                ? "Required *"
+                : error.pass
+                ? "Please enter same passwords"
+                : ""}
+            </span>
           </label>
           <div className="relative">
             <input
