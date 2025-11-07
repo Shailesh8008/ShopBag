@@ -7,6 +7,9 @@ import QueryPage from "./Pages/QueryPage";
 import SigninPage from "./Pages/SigninPage";
 import Signup from "./Pages/Signup";
 import Cart from "./Pages/Cart";
+import AdminDash from "./admin/AdminDash";
+import AdminProduct from "./admin/AdminProduct";
+import AdminQuery from "./admin/AdminQuery";
 
 export default function App() {
   const location = useLocation();
@@ -59,6 +62,9 @@ export default function App() {
             </>
           }
         />
+        <Route path="/admin/dashboard" element={<AdminDash />} />
+        <Route path="/admin/products" element={<AdminProduct />} />
+        <Route path="/admin/query" element={<AdminQuery />} />
       </Routes>
       <Footer />
     </>

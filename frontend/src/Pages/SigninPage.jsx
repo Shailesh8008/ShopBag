@@ -35,6 +35,7 @@ export default function SigninPage({ isOpen, setIsOpen }) {
         return toast.error(data.message);
       }
       toast.success(data.message);
+      setIsOpen(false);
       navigate("/");
     } catch (error) {}
   };
