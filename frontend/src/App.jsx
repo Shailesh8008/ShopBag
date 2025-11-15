@@ -11,6 +11,7 @@ import AdminDash from "./admin/AdminDash";
 import AdminProduct from "./admin/AdminProduct";
 import AdminQuery from "./admin/AdminQuery";
 import AddProduct from "./admin/AddProduct";
+import EditProduct from "./admin/EditProduct";
 
 export default function App() {
   const location = useLocation();
@@ -67,6 +68,7 @@ export default function App() {
         <Route path="/admin/products" element={<AdminProduct />} />
         <Route path="/admin/query" element={<AdminQuery />} />
         <Route path="/admin/addproducts" element={<AddProduct />} />
+        <Route path="/admin/editproduct" element={<EditProduct />} />
       </Routes>
       <Footer />
     </>

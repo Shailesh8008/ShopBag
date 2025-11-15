@@ -1,4 +1,3 @@
-import React from "react";
 import AdminNav from "./AdminNav";
 import { useNavigate } from "react-router-dom";
 
@@ -12,8 +11,8 @@ export default function AddProduct() {
     <div className="flex min-h-screen -mb-14">
       <AdminNav />
       <div className="flex-1 p-10">
-        <h1 className="text-2xl text-gray-700 font-bold mb-4">
-          Add Products 🛍️
+        <h1 className="text-2xl text-gray-700 font-bold mb-4 cursor-default">
+          Edit Product 🛍️
         </h1>
         <button
           onClick={(e) => navigate("/admin/products")}
@@ -57,7 +56,18 @@ export default function AddProduct() {
                 <option value="beauty">Beauty</option>
               </select>
             </div>
-            <label htmlFor="pimage">Product Image</label>
+            <div>
+              <label htmlFor="stock">Stock</label>
+              <select
+                id="stock"
+                className="block w-full shadow-inner shadow-gray-200 mt-2 py-1.5 px-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:bg-gray-50"
+              >
+                <option hidden>--Select--</option>
+                <option value="inStock">In Stock</option>
+                <option value="outOfStock">Out Of Stock</option>
+              </select>
+            </div>
+            <label htmlFor="">Product Image</label>
             <div className="w-full shadow-inner shadow-gray-200 mt-2 py-1.5 px-2 rounded border border-gray-300">
               <input
                 type="file"
@@ -70,7 +80,7 @@ export default function AddProduct() {
               onClick={handleSubmit}
               className="px-5 py-1.5 bg-red-600 rounded text-white cursor-pointer active:bg-red-800"
             >
-              Add Product
+              Save Changes
             </button>
           </form>
         </div>
