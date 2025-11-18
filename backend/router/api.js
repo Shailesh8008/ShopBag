@@ -9,6 +9,7 @@ apiRouter.get("/", (req, res) => {
 apiRouter.post("/api/reg", userController.reg);
 apiRouter.post("/api/login", userController.login);
 apiRouter.post("/api/addproduct", adminController.addproduct);
-apiRouter.get("/api/getproducts",adminController.getProducts)
+apiRouter.get("/api/getproducts", adminController.getProducts);
+apiRouter.delete("/api/deleteproduct/:pid", adminController.deleteProduct);
 
 module.exports = apiRouter;

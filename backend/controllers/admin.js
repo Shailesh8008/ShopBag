@@ -23,7 +23,7 @@ const getProducts = async (req, res) => {
   try {
     const data = await model.find();
     if (!data) {
-      return res.json({ ok: false });
+      return res.json({ ok: false, message: "Cannot find any product" });
     }
     return res.json({ ok: true, data: data });
   } catch (error) {
@@ -31,4 +31,15 @@ const getProducts = async (req, res) => {
   }
 };
 
-module.exports = { addproduct, getProducts };
+const deleteProduct = async (req, res) => {
+  try {
+    const { pid } = req.params;
+    await model.findByIdAndDelete(pid);
+    const data = await model.find();
+    return res.json({ ok: true, data: data });
+  } catch (error) {
+    res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+module.exports = { addproduct, getProducts, deleteProduct };

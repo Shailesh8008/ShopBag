@@ -4,6 +4,7 @@ import capsicum from "../assets/capsicum.png";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function AdminProduct() {
   const [products, setProducts] = useState([]);
@@ -13,6 +14,8 @@ export default function AdminProduct() {
       const res = await fetch("/api/getproducts");
       const data = await res.json();
       if (!data.ok) {
+        console.log("toast should run with message 'cannot find product'");
+        toast.error(data.message);
         return setProducts([]);
       }
       return setProducts(data.data);
@@ -20,10 +23,25 @@ export default function AdminProduct() {
       console.log("Internal server error");
     }
   };
-  console.log(products);
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [products]);
+
+  const handleDelete = async (pid, pname) => {
+    try {
+      const res = await fetch(`/api/deleteproduct/${pid}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        return toast.error("Cannot delete this product!");
+      }
+      toast.success(`${pname} Deleted Successfully`);
+      return setProducts(data.data);
+    } catch (error) {
+      console.log("Internal server error");
+    }
+  };
 
   return (
     <div className="flex min-h-screen -mb-14">
@@ -39,37 +57,44 @@ export default function AdminProduct() {
           Add Products
         </button>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-5">
-          {products.map((e) => {
-            return (
-              <div
-                key={e["_id"]}
-                className="shadow rounded-xl hover:shadow-lg border border-gray-100 p-4"
-              >
-                <img
-                  src={capsicum}
-                  alt=""
-                  className="w-full h-50 rounded-md border border-gray-300"
-                />
-                <div className="p-2 space-y-1">
-                  <p className="text-xl font-semibold text-gray-700">
-                    {e.pname}
-                  </p>
-                  <p className="font-semibold text-sm text-gray-600">
-                    Category: {e.category}
-                  </p>
-                  <p className="font-bold text-green-600">₹ {e.price}</p>
-                  <p className="font-semibold text-blue-600">In Stock</p>
-                </div>
-                <div className="flex justify-between text-lg">
-                  <FaEdit
-                    className="text-blue-700 cursor-pointer"
-                    onClick={(e) => navigate("/admin/editproduct")}
+          {products.length != 0 ? (
+            products.map((e) => {
+              return (
+                <div
+                  key={e["_id"]}
+                  className="shadow rounded-xl hover:shadow-lg border border-gray-100 p-4"
+                >
+                  <img
+                    src={capsicum}
+                    alt=""
+                    className="w-full h-50 rounded-md border border-gray-300"
                   />
-                  <RiDeleteBin5Line className="text-red-600 cursor-pointer" />
+                  <div className="p-2 space-y-1">
+                    <p className="text-xl font-semibold text-gray-700">
+                      {e.pname}
+                    </p>
+                    <p className="font-semibold text-sm text-gray-600">
+                      Category: {e.category}
+                    </p>
+                    <p className="font-bold text-green-600">₹ {e.price}</p>
+                    <p className="font-semibold text-blue-600">In Stock</p>
+                  </div>
+                  <div className="flex justify-between text-lg">
+                    <FaEdit
+                      className="text-blue-700 cursor-pointer"
+                      onClick={(e) => navigate("/admin/editproduct")}
+                    />
+                    <RiDeleteBin5Line
+                      onClick={() => handleDelete(e["_id"], e["pname"])}
+                      className="text-red-600 cursor-pointer"
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <h2 className="text-red-600">No Products Found !</h2>
+          )}
         </div>
       </div>
     </div>
