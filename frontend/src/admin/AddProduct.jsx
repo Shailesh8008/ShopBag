@@ -1,11 +1,44 @@
-import React from "react";
+import { useState } from "react";
 import AdminNav from "./AdminNav";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function AddProduct() {
+  const [productDetails, setProductDetails] = useState({
+    pname: "",
+    price: "",
+    category: "",
+  });
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const res = await fetch("/api/addproduct", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(productDetails),
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        return toast.error(data.message || "Some error occurred");
+      }
+      toast.success(data.message || "Product Added Successfully");
+      setProductDetails({
+        pname: "",
+        price: "",
+        category: "",
+      });
+    } catch (error) {
+      console.log("some error occured");
+    }
+  };
+
+  const handleChange = (e) => {
+    setProductDetails({
+      ...productDetails,
+      [e.target.id]: e.target.value,
+    });
   };
 
   return (
@@ -28,6 +61,8 @@ export default function AddProduct() {
               <input
                 id="pname"
                 type="text"
+                value={productDetails.pname}
+                onChange={handleChange}
                 className="block w-full shadow-inner shadow-gray-200 mt-2 py-1.5 px-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:bg-gray-50"
               />
             </div>
@@ -36,6 +71,8 @@ export default function AddProduct() {
               <input
                 id="price"
                 type="number"
+                value={productDetails.price}
+                onChange={handleChange}
                 min="0"
                 className="block w-full shadow-inner shadow-gray-200 mt-2 py-1.5 px-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:bg-gray-50"
               />
@@ -43,11 +80,14 @@ export default function AddProduct() {
             <div>
               <label htmlFor="category">Category</label>
               <select
-                name=""
                 id="category"
+                value={productDetails.category}
+                onChange={handleChange}
                 className="block w-full shadow-inner shadow-gray-200 mt-2 py-1.5 px-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:bg-gray-50"
               >
-                <option hidden>--Select--</option>
+                <option value="" hidden>
+                  --Select--
+                </option>
                 <option value="cafe">Cafe</option>
                 <option value="electronics">Electronics</option>
                 <option value="toys">Toys</option>
