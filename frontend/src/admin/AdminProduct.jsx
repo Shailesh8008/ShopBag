@@ -3,9 +3,27 @@ import AdminNav from "./AdminNav";
 import capsicum from "../assets/capsicum.png";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { useEffect, useState } from "react";
 
 export default function AdminProduct() {
+  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+  const getProducts = async () => {
+    try {
+      const res = await fetch("/api/getproducts");
+      const data = await res.json();
+      if (!data.ok) {
+        return setProducts([]);
+      }
+      return setProducts(data.data);
+    } catch (error) {
+      console.log("Internal server error");
+    }
+  };
+  console.log(products);
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <div className="flex min-h-screen -mb-14">
@@ -21,9 +39,12 @@ export default function AdminProduct() {
           Add Products
         </button>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-5">
-          {[1, 2, 3, 4, 5].map((e,i) => {
+          {products.map((e) => {
             return (
-              <div key={i} className="shadow rounded-xl hover:shadow-lg border border-gray-100 p-4">
+              <div
+                key={e["_id"]}
+                className="shadow rounded-xl hover:shadow-lg border border-gray-100 p-4"
+              >
                 <img
                   src={capsicum}
                   alt=""
@@ -31,12 +52,12 @@ export default function AdminProduct() {
                 />
                 <div className="p-2 space-y-1">
                   <p className="text-xl font-semibold text-gray-700">
-                    Capsicum
+                    {e.pname}
                   </p>
                   <p className="font-semibold text-sm text-gray-600">
-                    Category: Fresh
+                    Category: {e.category}
                   </p>
-                  <p className="font-bold text-green-600">₹ 19</p>
+                  <p className="font-bold text-green-600">₹ {e.price}</p>
                   <p className="font-semibold text-blue-600">In Stock</p>
                 </div>
                 <div className="flex justify-between text-lg">
@@ -49,29 +70,6 @@ export default function AdminProduct() {
               </div>
             );
           })}
-
-          <div className="shadow rounded-xl hover:shadow-lg border border-gray-100 p-4">
-            <img
-              src={capsicum}
-              alt=""
-              className="w-full h-50 rounded-md border border-gray-300"
-            />
-            <div className="p-2 space-y-1">
-              <p className="text-xl font-semibold text-gray-700">Capsicum</p>
-              <p className="font-semibold text-sm text-gray-600">
-                Category: Fresh
-              </p>
-              <p className="font-bold text-green-600">₹ 19</p>
-              <p className="font-semibold text-blue-600">In Stock</p>
-            </div>
-            <div className="flex justify-between text-lg">
-              <FaEdit
-                className="text-blue-700 cursor-pointer"
-                onClick={(e) => navigate("/admin/editproduct")}
-              />
-              <RiDeleteBin5Line className="text-red-600 cursor-pointer" />
-            </div>
-          </div>
         </div>
       </div>
     </div>

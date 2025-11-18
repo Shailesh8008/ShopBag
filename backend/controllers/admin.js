@@ -19,4 +19,16 @@ const addproduct = async (req, res) => {
   }
 };
 
-module.exports = { addproduct };
+const getProducts = async (req, res) => {
+  try {
+    const data = await model.find();
+    if (!data) {
+      return res.json({ ok: false });
+    }
+    return res.json({ ok: true, data: data });
+  } catch (error) {
+    console.log("Internal server error");
+  }
+};
+
+module.exports = { addproduct, getProducts };
