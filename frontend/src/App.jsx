@@ -68,7 +68,7 @@ export default function App() {
         <Route path="/admin/products" element={<AdminProduct />} />
         <Route path="/admin/query" element={<AdminQuery />} />
         <Route path="/admin/addproducts" element={<AddProduct />} />
-        <Route path="/admin/editproduct" element={<EditProduct />} />
+        <Route path="/admin/editproduct/:id" element={<EditProduct />} />
       </Routes>
       <Footer />
     </>

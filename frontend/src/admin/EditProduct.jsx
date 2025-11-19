@@ -1,10 +1,56 @@
+import { useEffect, useState } from "react";
 import AdminNav from "./AdminNav";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function AddProduct() {
+  const [pDetails, setPDetails] = useState({
+    pname: "",
+    price: "",
+    category: "",
+    status: "",
+  });
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const params = useParams();
+
+  const getProductData = async (pid) => {
+    try {
+      const res = await fetch(`/api/getproduct/${pid}`);
+      const data = await res.json();
+      if (!data) {
+        return toast.error(data.message);
+      }
+      return setPDetails(data.data);
+    } catch (error) {
+      return toast.error("Internal server error");
+    }
+  };
+
+  useEffect(() => {
+    getProductData(params.id);
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const res = await fetch(`/api/editproduct/${params.id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pDetails),
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        return toast.error(data.message);
+      }
+      toast.success(data.message);
+      return setPDetails({ pname: "", price: "", category: "", status: "" });
+    } catch (error) {
+      return toast.error("Internal server error");
+    }
+  };
+
+  const handleChange = (e) => {
+    setPDetails({ ...pDetails, [e.target.id]: e.target.value });
   };
 
   return (
@@ -27,6 +73,8 @@ export default function AddProduct() {
               <input
                 id="pname"
                 type="text"
+                value={pDetails.pname}
+                onChange={handleChange}
                 className="block w-full shadow-inner shadow-gray-200 mt-2 py-1.5 px-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:bg-gray-50"
               />
             </div>
@@ -35,6 +83,8 @@ export default function AddProduct() {
               <input
                 id="price"
                 type="number"
+                value={pDetails.price}
+                onChange={handleChange}
                 min="0"
                 className="block w-full shadow-inner shadow-gray-200 mt-2 py-1.5 px-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:bg-gray-50"
               />
@@ -42,11 +92,14 @@ export default function AddProduct() {
             <div>
               <label htmlFor="category">Category</label>
               <select
-                name=""
                 id="category"
+                value={pDetails.category}
+                onChange={handleChange}
                 className="block w-full shadow-inner shadow-gray-200 mt-2 py-1.5 px-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:bg-gray-50"
               >
-                <option hidden>--Select--</option>
+                <option value="" hidden>
+                  --Select--
+                </option>
                 <option value="cafe">Cafe</option>
                 <option value="electronics">Electronics</option>
                 <option value="toys">Toys</option>
@@ -57,14 +110,16 @@ export default function AddProduct() {
               </select>
             </div>
             <div>
-              <label htmlFor="stock">Stock</label>
+              <label htmlFor="stock">Status</label>
               <select
-                id="stock"
+                id="status"
+                value={pDetails.status}
+                onChange={handleChange}
                 className="block w-full shadow-inner shadow-gray-200 mt-2 py-1.5 px-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:bg-gray-50"
               >
                 <option hidden>--Select--</option>
-                <option value="inStock">In Stock</option>
-                <option value="outOfStock">Out Of Stock</option>
+                <option value="In Stock">In Stock</option>
+                <option value="Out Of Stock">Out Of Stock</option>
               </select>
             </div>
             <label htmlFor="">Product Image</label>

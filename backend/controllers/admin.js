@@ -11,6 +11,7 @@ const addproduct = async (req, res) => {
       pname: pname,
       price: price,
       category: category,
+      status: "In Stock",
     });
     await record.save();
     return res.json({ ok: true, message: "Product added successfully" });
@@ -42,4 +43,50 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-module.exports = { addproduct, getProducts, deleteProduct };
+const getOneProduct = async (req, res) => {
+  try {
+    const { pid } = req.params;
+    const record = await model.findById(pid);
+    if (!record) {
+      return res.json({ ok: false, message: "Cannot find product" });
+    }
+    return res.json({ ok: true, data: record });
+  } catch (error) {
+    res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+const editProduct = async (req, res) => {
+  try {
+    const { pid } = req.params;
+    const { pname, price, category, status } = req.body;
+    if (!pname || !price || !category || !status) {
+      return res.json({ ok: false, message: "All fields are required" });
+    }
+
+    const isUpdated = await model.findByIdAndUpdate(pid, {
+      $set: {
+        pname: pname,
+        price: price,
+        category: category,
+        status: status,
+      },
+    });
+
+    if (!isUpdated) {
+      return res.json({ ok: false, message: "Cannot update this product" });
+    }
+    return res.json({ ok: true, message: "Updated Successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+module.exports = {
+  addproduct,
+  getProducts,
+  deleteProduct,
+  getOneProduct,
+  editProduct,
+};

@@ -14,7 +14,6 @@ export default function AdminProduct() {
       const res = await fetch("/api/getproducts");
       const data = await res.json();
       if (!data.ok) {
-        console.log("toast should run with message 'cannot find product'");
         toast.error(data.message);
         return setProducts([]);
       }
@@ -82,7 +81,7 @@ export default function AdminProduct() {
                   <div className="flex justify-between text-lg">
                     <FaEdit
                       className="text-blue-700 cursor-pointer"
-                      onClick={(e) => navigate("/admin/editproduct")}
+                      onClick={() => navigate(`/admin/editproduct/${e["_id"]}`)}
                     />
                     <RiDeleteBin5Line
                       onClick={() => handleDelete(e["_id"], e["pname"])}

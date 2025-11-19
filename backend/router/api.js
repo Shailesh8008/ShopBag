@@ -11,5 +11,7 @@ apiRouter.post("/api/login", userController.login);
 apiRouter.post("/api/addproduct", adminController.addproduct);
 apiRouter.get("/api/getproducts", adminController.getProducts);
 apiRouter.delete("/api/deleteproduct/:pid", adminController.deleteProduct);
+apiRouter.get("/api/getproduct/:pid", adminController.getOneProduct);
+apiRouter.post("/api/editproduct/:pid", adminController.editProduct);
 
 module.exports = apiRouter;
