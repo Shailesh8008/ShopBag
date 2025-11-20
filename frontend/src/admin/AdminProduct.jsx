@@ -76,7 +76,15 @@ export default function AdminProduct() {
                       Category: {e.category}
                     </p>
                     <p className="font-bold text-green-600">₹ {e.price}</p>
-                    <p className="font-semibold text-blue-600">In Stock</p>
+                    <p
+                      className={`font-semibold ${
+                        e.status === "In Stock"
+                          ? "text-blue-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {e.status}
+                    </p>
                   </div>
                   <div className="flex justify-between text-lg">
                     <FaEdit
