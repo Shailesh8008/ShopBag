@@ -9,15 +9,21 @@ export default function AddProduct() {
     price: "",
     category: "",
   });
+  const [pImage, setPImage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("pname", productDetails.pname);
+    formData.append("price", productDetails.price);
+    formData.append("category", productDetails.category);
+    formData.append("pimage", pImage);
+
     try {
       const res = await fetch("/api/addproduct", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(productDetails),
+        body: formData,
       });
       const data = await res.json();
       if (!data.ok) {
@@ -55,7 +61,7 @@ export default function AddProduct() {
           Back
         </button>
         <div className="shadow-lg px-4 py-6 rounded max-w-3xl mx-auto">
-          <form className="space-y-6">
+          <form className="space-y-6" encType="multipart/form-data">
             <div>
               <label htmlFor="pname">Product Name</label>
               <input
@@ -88,13 +94,13 @@ export default function AddProduct() {
                 <option value="" hidden>
                   --Select--
                 </option>
-                <option value="cafe">Cafe</option>
-                <option value="electronics">Electronics</option>
-                <option value="toys">Toys</option>
-                <option value="mobile">Mobile</option>
-                <option value="fresh">Fresh</option>
-                <option value="home">Home</option>
-                <option value="beauty">Beauty</option>
+                <option value="Cafe">Cafe</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Toys">Toys</option>
+                <option value="Mobile">Mobile</option>
+                <option value="Fresh">Fresh</option>
+                <option value="Home">Home</option>
+                <option value="Beauty">Beauty</option>
               </select>
             </div>
             <label htmlFor="pimage">Product Image</label>
@@ -102,6 +108,8 @@ export default function AddProduct() {
               <input
                 type="file"
                 id="pimage"
+                name="pimage"
+                onChange={(e) => setPImage(e.target.files[0])}
                 accept="image/*"
                 className="file:cursor-pointer file:border file:border-gray-400 file:bg-gray-200 file:px-1 file:mr-2 active:file:bg-gray-300"
               />

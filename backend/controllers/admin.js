@@ -3,6 +3,7 @@ const model = require("../models/product");
 const addproduct = async (req, res) => {
   try {
     const { pname, price, category } = req.body;
+    const { filename } = req.file;
     if (!pname || !price || !category) {
       return res.json({ ok: false, message: "All fields are required!" });
     }
@@ -12,6 +13,7 @@ const addproduct = async (req, res) => {
       price: price,
       category: category,
       status: "In Stock",
+      pimage: filename,
     });
     await record.save();
     return res.json({ ok: true, message: "Product added successfully" });
