@@ -24,7 +24,7 @@ export default function AdminProduct() {
   };
   useEffect(() => {
     getProducts();
-  }, [products]);
+  }, []);
 
   const handleDelete = async (pid, pname) => {
     try {
@@ -64,7 +64,7 @@ export default function AdminProduct() {
                   className="shadow rounded-xl hover:shadow-lg border border-gray-100 p-4"
                 >
                   <img
-                    src={`http://localhost:5000/uploads/${e.pimage}`}
+                    src={`/uploads/${e.pimage}`}
                     alt={e.pimage}
                     className="w-full h-50 rounded-md border border-gray-300"
                   />
