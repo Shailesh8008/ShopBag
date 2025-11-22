@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import productImg from "../assets/productsImg.jpg";
 import toast from "react-hot-toast";
 
 export default function Products() {
@@ -13,7 +12,7 @@ export default function Products() {
         toast.error(data.message);
         return setProducts([]);
       }
-      return setProducts(data.data);
+      return setProducts(data.data.filter((e) => e.status == "In Stock"));
     } catch (error) {
       console.log("Internal server error");
     }

@@ -1,5 +1,4 @@
 import fast_deliver from "../assets/fast-deliver.jpg";
-import fast_delivery from "../assets/fast_delivery.jpg";
 
 export default function Home({ isOpen }) {
   return (

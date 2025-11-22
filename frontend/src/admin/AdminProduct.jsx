@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import AdminNav from "./AdminNav";
-import capsicum from "../assets/capsicum.png";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useEffect, useState } from "react";
