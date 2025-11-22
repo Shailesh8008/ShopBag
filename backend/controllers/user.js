@@ -1,4 +1,5 @@
 const model = require("../models/user");
+const queryModel = require("../models/query");
 const bcrypt = require("bcrypt");
 
 const reg = async (req, res) => {
@@ -54,4 +55,23 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { reg, login };
+const query = async (req, res) => {
+  try {
+    const { username, email, query } = req.body;
+    if (!username || !email || !query) {
+      return res.json({ ok: false, message: "All fields are required" });
+    }
+    console.log(queryModel.find());
+    const record = new queryModel({
+      username: username,
+      email: email,
+      query: query,
+    });
+    await record.save();
+    return res.json({ ok: true, message: "Query Submitted Successfully" });
+  } catch (error) {
+    return res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+module.exports = { reg, login, query };

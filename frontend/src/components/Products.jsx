@@ -9,7 +9,6 @@ export default function Products() {
       const res = await fetch("/api/getproducts");
       const data = await res.json();
       if (!data.ok) {
-        toast.error(data.message);
         return setProducts([]);
       }
       return setProducts(data.data.filter((e) => e.status == "In Stock"));
