@@ -1,7 +1,34 @@
+import { useState } from "react";
 import AdminNav from "./AdminNav";
 import { FcVoicePresentation } from "react-icons/fc";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 export default function AdminQuery() {
+  const [queries, setQueries] = useState([]);
+
+  const getQueries = async () => {
+    try {
+      const res = await fetch("/api/getqueries");
+      const data = await res.json();
+      if (!data.ok) {
+        toast.error(data.message);
+        return setQueries([]);
+      }
+      return setQueries(data.data.reverse());
+    } catch (error) {
+      toast.error("Internal server error");
+    }
+  };
+
+  useEffect(() => {
+    getQueries();
+  }, []);
+  console.log();
+
+  const validateLength = (value) =>
+    value.length > 10 ? value.slice(0, 10) + "..." : value;
+
   return (
     <div className="flex min-h-screen -mb-14 cursor-default">
       <AdminNav />
@@ -24,15 +51,25 @@ export default function AdminQuery() {
             </tr>
           </thead>
           <tbody className="text-sm">
-            <tr className="border-b border-gray-300 text-center">
-              <td className="px-6 py-3">1</td>
-              <td className="px-6 py-3">Shailesh</td>
-              <td className="px-6 py-3">Final Project</td>
-              <td className="px-6 py-3">abc123@gmail.com</td>
-              <td className="px-6 py-3">Unread</td>
-              <td className="px-6 py-3"><button className="text-xs text-white bg-green-500 active:bg-green-600 px-3 py-2 rounded cursor-pointer font-semibold">Reply</button></td>
-              <td className="px-6 py-3"><button className="text-xs text-white bg-red-500 active:bg-red-600 px-3 py-2 rounded cursor-pointer font-semibold">Delete</button></td>
-            </tr>
+            {queries.map((el, i) => (
+              <tr key={i} className="border-b border-gray-300 text-center">
+                <td className="px-6 py-3">{i + 1}</td>
+                <td className="px-6 py-3">{validateLength(el.username)}</td>
+                <td className="px-6 py-3">{validateLength(el.query)}</td>
+                <td className="px-6 py-3">{validateLength(el.email)}</td>
+                <td className="px-6 py-3">{el.status}</td>
+                <td className="px-6 py-3">
+                  <button className="text-xs text-white bg-green-500 active:bg-green-600 px-3 py-2 rounded cursor-pointer font-semibold">
+                    Reply
+                  </button>
+                </td>
+                <td className="px-6 py-3">
+                  <button className="text-xs text-white bg-red-500 active:bg-red-600 px-3 py-2 rounded cursor-pointer font-semibold">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

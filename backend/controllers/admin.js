@@ -1,4 +1,5 @@
 const model = require("../models/product");
+const queryModel = require("../models/query");
 
 const addproduct = async (req, res) => {
   try {
@@ -85,10 +86,23 @@ const editProduct = async (req, res) => {
   }
 };
 
+const getQueries = async (req, res) => {
+  try {
+    const record = await queryModel.find();
+    if (!record) {
+      return res.json({ ok: false, message: "No queries" });
+    }
+    return res.json({ ok: true, data: record })
+  } catch (error) {
+    return res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   addproduct,
   getProducts,
   deleteProduct,
   getOneProduct,
   editProduct,
+  getQueries
 };
