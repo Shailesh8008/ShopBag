@@ -92,7 +92,18 @@ const getQueries = async (req, res) => {
     if (!record) {
       return res.json({ ok: false, message: "No queries" });
     }
-    return res.json({ ok: true, data: record })
+    return res.json({ ok: true, data: record });
+  } catch (error) {
+    return res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+const deleteQuery = async (req, res) => {
+  try {
+    const { qid } = req.params;
+    await queryModel.findByIdAndDelete(qid);
+    const record = await queryModel.find();
+    return res.json({ ok: true, data: record });
   } catch (error) {
     return res.json({ ok: false, message: "Internal server error" });
   }
@@ -104,5 +115,6 @@ module.exports = {
   deleteProduct,
   getOneProduct,
   editProduct,
-  getQueries
+  getQueries,
+  deleteQuery,
 };

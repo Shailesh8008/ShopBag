@@ -29,6 +29,20 @@ export default function AdminQuery() {
   const validateLength = (value) =>
     value.length > 10 ? value.slice(0, 10) + "..." : value;
 
+  const handleDelete = async (qid) => {
+    try {
+      const res = await fetch(`/api/deletequery/${qid}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!data.ok) {
+        return toast.error(data.message || "Cannot delete this query");
+      }
+      setQueries(data.data);
+      return toast.success("Successfully Deleted");
+    } catch (error) {
+      toast.error("Internal server error");
+    }
+  };
+
   return (
     <div className="flex min-h-screen -mb-14 cursor-default">
       <AdminNav />
@@ -64,7 +78,10 @@ export default function AdminQuery() {
                   </button>
                 </td>
                 <td className="px-6 py-3">
-                  <button className="text-xs text-white bg-red-500 active:bg-red-600 px-3 py-2 rounded cursor-pointer font-semibold">
+                  <button
+                    onClick={() => handleDelete(el["_id"])}
+                    className="text-xs text-white bg-red-500 active:bg-red-600 px-3 py-2 rounded cursor-pointer font-semibold"
+                  >
                     Delete
                   </button>
                 </td>

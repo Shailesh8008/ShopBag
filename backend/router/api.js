@@ -20,5 +20,6 @@ apiRouter.get("/api/getproduct/:pid", adminController.getOneProduct);
 apiRouter.post("/api/editproduct/:pid", adminController.editProduct);
 apiRouter.post("/api/submitquery", userController.query);
 apiRouter.get("/api/getqueries", adminController.getQueries);
+apiRouter.delete("/api/deletequery/:qid", adminController.deleteQuery);
 
 module.exports = apiRouter;
