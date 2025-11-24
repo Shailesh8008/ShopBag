@@ -12,6 +12,7 @@ import AdminProduct from "./admin/AdminProduct";
 import AdminQuery from "./admin/AdminQuery";
 import AddProduct from "./admin/AddProduct";
 import EditProduct from "./admin/EditProduct";
+import QueryReply from "./admin/QueryReply";
 
 export default function App() {
   const location = useLocation();
@@ -69,6 +70,7 @@ export default function App() {
         <Route path="/admin/query" element={<AdminQuery />} />
         <Route path="/admin/addproducts" element={<AddProduct />} />
         <Route path="/admin/editproduct/:id" element={<EditProduct />} />
+        <Route path="/admin/queryreply/:id" element={<QueryReply />} />
       </Routes>
       <Footer />
     </>

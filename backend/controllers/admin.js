@@ -1,5 +1,6 @@
 const model = require("../models/product");
 const queryModel = require("../models/query");
+const nodemailer = require("nodemailer");
 
 const addproduct = async (req, res) => {
   try {
@@ -81,7 +82,6 @@ const editProduct = async (req, res) => {
     }
     return res.json({ ok: true, message: "Updated Successfully" });
   } catch (error) {
-    console.log(error);
     return res.json({ ok: false, message: "Internal server error" });
   }
 };
@@ -109,6 +109,64 @@ const deleteQuery = async (req, res) => {
   }
 };
 
+const getOneQuery = async (req, res) => {
+  try {
+    const { qid } = req.params;
+    const record = await queryModel.findById(qid);
+    if (!record) {
+      return res.json({ ok: false, message: "Cannot find query" });
+    }
+    return res.json({ ok: true, data: record });
+  } catch (error) {
+    return res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+const updateQuery = async (req, res) => {
+  try {
+    const { qid } = req.params;
+    await queryModel.findByIdAndUpdate(qid, { status: "Seen" });
+    const record = await queryModel.find();
+    return res.json({ ok: true, data: record });
+  } catch (error) {
+    return res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+const queryReply = async (req, res) => {
+  try {
+    const { qid } = req.params;
+    const { to, sub, reply } = req.body;
+    if (!to || !sub || !reply) {
+      return res.json({ ok: false, message: "All fields are required" });
+    }
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "shailesh10thd1@gmail.com",
+        pass: "qyoqgtvusvcikqse",
+      },
+    });
+    const info = await transporter.sendMail({
+      from: '"ShopBag" <shailesh10thd1@gmail.com>',
+      to: to,
+      subject: sub,
+      text: reply,
+      html: reply,
+    });
+    if (!info) {
+      return res.json({ ok: false, message: "Cannot sent" });
+    }
+    await queryModel.findByIdAndUpdate(qid, { status: "Replied" });
+    return res.json({ ok: true, message: "Successfully sent" });
+  } catch (error) {
+    res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   addproduct,
   getProducts,
@@ -117,4 +175,7 @@ module.exports = {
   editProduct,
   getQueries,
   deleteQuery,
+  getOneQuery,
+  updateQuery,
+  queryReply,
 };
