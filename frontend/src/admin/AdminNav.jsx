@@ -18,7 +18,7 @@ export default function AdminNav() {
         <Link to={"/admin/query"} className="block hover:text-green-500">
           <LuMessageSquareWarning className="inline mr-1" /> Manage Queries
         </Link>
-        <Link className="block hover:text-red-500">
+        <Link to={"/"} className="block hover:text-red-500">
           <ImExit className="inline mr-1" /> Exit Store
         </Link>
       </nav>
