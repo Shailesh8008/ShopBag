@@ -65,7 +65,7 @@ export default function AdminProduct() {
                   <img
                     src={`/uploads/${e.pimage}`}
                     alt={e.pimage}
-                    className="w-full h-50 rounded-md border border-gray-300"
+                    className="w-full h-50 object-contain justify-self-center rounded-md border border-gray-300"
                   />
                   <div className="p-2 space-y-1">
                     <p className="text-xl font-semibold text-gray-700">

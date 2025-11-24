@@ -36,7 +36,7 @@ export default function Products() {
                 <img
                   src={`/uploads/${el.pimage}`}
                   alt={el.pimage}
-                  className="w-full h-40 rounded-md border border-gray-300"
+                  className="w-full h-40 object-contain rounded-md border border-gray-300"
                 />
               </div>
               <p className="font-semibold text-lg">{el.pname}</p>

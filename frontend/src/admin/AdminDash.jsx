@@ -1,7 +1,28 @@
+import { useEffect, useState } from "react";
 import AdminNav from "./AdminNav";
 import { FcComboChart } from "react-icons/fc";
 
 export default function AdminDash() {
+  const [products, setProducts] = useState([]);
+
+  const getProducts = async () => {
+    try {
+      const res = await fetch("/api/getproducts");
+      const data = await res.json();
+      if (!data.ok) {
+        toast.error(data.message);
+        return setProducts([]);
+      }
+      return setProducts(data.data);
+    } catch (error) {
+      console.log("Internal server error");
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
   return (
     <div className="flex min-h-screen -mb-14">
       <AdminNav />
@@ -12,7 +33,7 @@ export default function AdminDash() {
         </div>
         <div className="shadow-lg p-4 rounded space-y-2">
           <p className="text-gray-600 font-semibold">Total Products</p>
-          <p className="text-green-500 font-bold text-xl">45</p>
+          <p className="text-green-500 font-bold text-xl">{products.length}</p>
         </div>
       </div>
     </div>
