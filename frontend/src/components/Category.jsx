@@ -17,7 +17,7 @@ const category = [
   { name: "Beauty", icon: <PiHairDryer /> },
 ];
 
-export default function Category() {
+export default function Category({ products, setFilteredProducts }) {
   return (
     <section className="mb-4 px-6">
       <div className="flex gap-4 md:gap-7 text-center md:justify-center overflow-x-auto md:overflow-visible bg-gray-100 py-2 px-2 rounded">
@@ -25,6 +25,13 @@ export default function Category() {
           return (
             <div
               key={i}
+              onClick={() =>
+                setFilteredProducts(
+                  el.name == "All"
+                    ? products
+                    : products.filter((el1) => el1.category == el.name)
+                )
+              }
               className="justify-items-center cursor-pointer text-gray-700 font-medium hover:text-purple-600 md:hover:scale-110"
             >
               <div className="text-xl mb-1">{el.icon}</div>
