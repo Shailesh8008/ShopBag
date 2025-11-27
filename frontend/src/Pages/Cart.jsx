@@ -1,10 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
-import productImg from "../assets/react.svg";
 import CartItems from "../components/CartItems";
 import Modal from "../components/Modal";
+import { useEffect } from "react";
+import { saveCart } from "../../store/slices/CartSlice";
 
 export default function Cart({ isOpen, setIsOpen }) {
   const cartState = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(
+      saveCart({
+        cartData: cartState,
+      })
+    );
+  }, [cartState]);
 
   return (
     <Modal

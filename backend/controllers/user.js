@@ -1,5 +1,6 @@
 const model = require("../models/user");
 const queryModel = require("../models/query");
+const cartModel = require("../models/cart");
 const bcrypt = require("bcrypt");
 
 const reg = async (req, res) => {
@@ -74,4 +75,24 @@ const query = async (req, res) => {
   }
 };
 
-module.exports = { reg, login, query };
+const userCart = async (req, res) => {
+  try {
+    const { cartData } = req.body;
+    const isCartExists = await cartModel.findOne();
+    if (isCartExists) {
+      await cartModel.findByIdAndUpdate(isCartExists["_id"], {
+        CartItems: cartData,
+      });
+    } else {
+      const record = new cartModel({
+        CartItems: cartData,
+      });
+      await record.save();
+    }
+    return res.json({ ok: true });
+  } catch (error) {
+    return res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+module.exports = { reg, login, query, userCart };

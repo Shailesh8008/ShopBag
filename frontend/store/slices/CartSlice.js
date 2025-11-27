@@ -1,7 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const findItemIndex = (state, action) =>
   state.findIndex((el) => el.pid == action.payload.pid);
+
+export const saveCart = createAsyncThunk("cart/save", async (cartData) => {
+  try {
+    const res = await fetch("/api/savecart", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(cartData),
+    });
+    const data = await res.json();
+  } catch (error) {
+    console.log("Internal server error");
+  }
+});
 
 const slice = createSlice({
   name: "cart",
