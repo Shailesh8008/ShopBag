@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import Category from "./Category";
+import { useDispatch } from "react-redux";
+import { cartAddItem } from "../../store/slices/CartSlice";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const dispatch = useDispatch();
 
   const getProducts = async () => {
     try {
@@ -57,7 +60,19 @@ export default function Products() {
                     : el.desc}
                 </p>
                 <div className="text-center">
-                  <button className="ring-2 ring-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-semibold rounded py-1.5 px-3 active:bg-purple-800 transition-all cursor-pointer">
+                  <button
+                    className="border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-semibold rounded-md py-1.5 px-3 active:bg-purple-800 active:border-purple-800 transition-all cursor-pointer"
+                    onClick={() =>
+                      dispatch(
+                        cartAddItem({
+                          pid: el["_id"],
+                          pname: el.pname,
+                          price: el.price,
+                          pimage: el.pimage,
+                        })
+                      )
+                    }
+                  >
                     Add to Cart
                   </button>
                 </div>
