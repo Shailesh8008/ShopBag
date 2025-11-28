@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HomePage from "./Pages/HomePage";
@@ -13,13 +13,16 @@ import AdminQuery from "./admin/AdminQuery";
 import AddProduct from "./admin/AddProduct";
 import EditProduct from "./admin/EditProduct";
 import QueryReply from "./admin/QueryReply";
+import Search from "./Pages/Search";
 
 export default function App() {
   const location = useLocation();
   const path = location.state?.pathname;
-  let element = "";
-  if (path == "/") {
-    element = <HomePage />;
+  let element = <></>;
+  if (path == "/search") {
+    element = <Search />;
+  } else {
+    element=<HomePage />
   }
   console.log(path);
   const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +64,7 @@ export default function App() {
           element={
             <>
               <Cart isOpen={isOpen} setIsOpen={setIsOpen} />
-              <HomePage />
+              {element}
             </>
           }
         />
@@ -71,6 +74,7 @@ export default function App() {
         <Route path="/admin/addproducts" element={<AddProduct />} />
         <Route path="/admin/editproduct/:id" element={<EditProduct />} />
         <Route path="/admin/queryreply/:id" element={<QueryReply />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
       <Footer />
     </>

@@ -1,6 +1,7 @@
 const model = require("../models/user");
 const queryModel = require("../models/query");
 const cartModel = require("../models/cart");
+const productModel = require("../models/product");
 const bcrypt = require("bcrypt");
 
 const reg = async (req, res) => {
@@ -95,4 +96,17 @@ const userCart = async (req, res) => {
   }
 };
 
-module.exports = { reg, login, query, userCart };
+const getSearchResult = async (req, res) => {
+  try {
+    const { query } = req.query;
+    const rec = await productModel.find({
+      pname: { $regex: query, $options: "i" },
+      status: "In Stock",
+    });
+    return res.json({ ok: true, data: rec });
+  } catch (error) {
+    return res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+module.exports = { reg, login, query, userCart, getSearchResult };

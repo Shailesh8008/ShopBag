@@ -8,10 +8,14 @@ import {
 } from "react-icons/fa";
 import { LuMessageSquareMore } from "react-icons/lu";
 import { IoMdHome } from "react-icons/io";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import useWindowWidth from "../../hooks/useWindowWidth";
 
 export default function Navbar({ setIsOpen }) {
+  const navigate = useNavigate();
   const location = useLocation();
+  const path = location.pathname;
+  const windowWidth = useWindowWidth();
 
   const [isBarOpen, setIsBarOpen] = useState(false);
   const onClick = () => {
@@ -25,11 +29,39 @@ export default function Navbar({ setIsOpen }) {
           <h1>ShopBag</h1>
           <div className="flex-1 mx-4">
             <div className="relative">
-              <input
-                type="text"
-                className="w-full focus:outline-none focus:ring-1 focus:ring-purple-600 rounded-full bg-gray-300 pl-4 pr-7 py-1"
-              />
-              <FaSearch className="absolute top-2 right-3 hover:text-purple-600" />
+              {path != "/search" ? (
+                <Link
+                  to={"/search"}
+                  className="block w-full rounded-full bg-gray-300/60 sm:px-5 px-3 py-1 cursor-pointer border border-gray-300 hover:border-purple-500 hover:text-purple-600"
+                >
+                  <p className="text-gray-700">
+                    {windowWidth > 480
+                      ? "Search in electronics, toys, mobiles, etc."
+                      : "Search in anything..."}
+                  </p>
+                  <FaSearch className="absolute top-2 right-4  text-inherit " />
+                </Link>
+              ) : (
+                <>
+                  <input
+                    type="text"
+                    onKeyDown={(e) =>
+                      e.key == "Enter" &&
+                      navigate(
+                        `/search?query=${e.target.value.replaceAll(" ", "+")}`
+                      )
+                    }
+                    autoFocus
+                    placeholder={`${
+                      windowWidth > 480
+                        ? "Search in electronics, toys, mobiles, etc."
+                        : "Search in anything..."
+                    }`}
+                    className="w-full focus:outline-1 focus:outline-purple-600 rounded-full bg-gray-300/60 pl-4 pr-8 py-1 outline-1 outline-gray-300 hover:outline-1 hover:outline-purple-600"
+                  />
+                  <FaSearch className="absolute top-2 right-3" />
+                </>
+              )}
             </div>
           </div>
           <div className="hidden sm:block">

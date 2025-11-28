@@ -25,5 +25,6 @@ apiRouter.delete("/api/deletequery/:qid", adminController.deleteQuery);
 apiRouter.get("/api/updatestatus/:qid", adminController.updateQuery);
 apiRouter.post("/api/queryreply/:qid", adminController.queryReply);
 apiRouter.post("/api/savecart", userController.userCart);
+apiRouter.get("/api/search", userController.getSearchResult);
 
 module.exports = apiRouter;
