@@ -3,6 +3,7 @@ const queryModel = require("../models/query");
 const cartModel = require("../models/cart");
 const productModel = require("../models/product");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const reg = async (req, res) => {
   try {
@@ -43,14 +44,24 @@ const login = async (req, res) => {
       return res.json({ ok: false, message: "Email does not exist!" });
     }
 
-    bcrypt.compare(pass, emailExists.pass, (err, result) => {
-      if (err) {
-        console.error("Error comparing passwords:", err);
-        return false;
+    const isPass = await bcrypt.compare(pass, emailExists.pass);
+    if (!isPass) {
+      return res.json({ ok: false, message: "Invalid Password!" });
+    }
+
+    const token = jwt.sign(
+      { id: emailExists["_id"] },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "2d",
       }
-      return result
-        ? res.json({ ok: true, message: "Login Successful!" })
-        : res.json({ ok: false, message: "Invalid Password!" });
+    );
+
+    return res.json({
+      ok: true,
+      message: "Login Successful!",
+      token,
+      data: emailExists["_id"],
     });
   } catch (error) {
     res.status(500).json({ error });

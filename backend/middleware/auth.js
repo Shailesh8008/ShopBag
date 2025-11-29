@@ -1,0 +1,22 @@
+const { json } = require("express");
+const jwt = require("jsonwebtoken");
+
+const auth = (req, res, next) => {
+  const bearerHeader = req.headers.authorization;
+  if (!bearerHeader || !bearerHeader.startsWith("Bearer")) {
+    return res.json({ ok: false, message: "Access Denied: No token provided" });
+  }
+
+  const token = bearerHeader.split(" ")[1];
+
+  try {
+    const verify = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    req.user = verify;
+  } catch (error) {
+    return res.json({ ok: false, message: "Token is invalid or expired" });
+  }
+
+  next();
+};
+
+module.exports = auth;

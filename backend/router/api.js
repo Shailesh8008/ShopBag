@@ -2,6 +2,7 @@ const apiRouter = require("express").Router();
 const userController = require("../controllers/user");
 const adminController = require("../controllers/admin");
 const { uploads } = require("../middleware/multer");
+const auth = require("../middleware/auth");
 
 apiRouter.get("/", (req, res) => {
   res.send("path '/' called.");
@@ -24,7 +25,7 @@ apiRouter.get("/api/getquerydetails/:qid", adminController.getOneQuery);
 apiRouter.delete("/api/deletequery/:qid", adminController.deleteQuery);
 apiRouter.get("/api/updatestatus/:qid", adminController.updateQuery);
 apiRouter.post("/api/queryreply/:qid", adminController.queryReply);
-apiRouter.post("/api/savecart", userController.userCart);
+apiRouter.post("/api/savecart",auth, userController.userCart);
 apiRouter.get("/api/search", userController.getSearchResult);
 
 module.exports = apiRouter;

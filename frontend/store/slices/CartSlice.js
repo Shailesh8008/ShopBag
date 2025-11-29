@@ -5,12 +5,18 @@ const findItemIndex = (state, action) =>
 
 export const saveCart = createAsyncThunk("cart/save", async (cartData) => {
   try {
+    const token = localStorage.getItem("token");
     const res = await fetch("/api/savecart", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(cartData),
     });
+
     const data = await res.json();
+    return data;
   } catch (error) {
     console.log("Internal server error");
   }
@@ -38,6 +44,11 @@ const slice = createSlice({
       if (state[itemIndex].qt == 1) state.splice(itemIndex, 1);
       else state[itemIndex].qt -= 1;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(saveCart.fulfilled, (state, action) => {
+      console.log(action.payload);
+    });
   },
 });
 

@@ -34,10 +34,14 @@ export default function SigninPage({ isOpen, setIsOpen }) {
       if (!data.ok) {
         return toast.error(data.message);
       }
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", data.data);
       toast.success(data.message);
       setIsOpen(false);
       navigate("/");
-    } catch (error) {}
+    } catch (error) {
+      console.log("Something went wrong");
+    }
   };
 
   const handleChange = (e) => {
@@ -118,7 +122,7 @@ export default function SigninPage({ isOpen, setIsOpen }) {
             )}
           </div>
         </div>
-        <button className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 w-full cursor-pointer transition active:bg-purple-800">
+        <button className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 w-full cursor-pointer transition active:bg-purple-800 active:text-white">
           Sign In
         </button>
       </form>
