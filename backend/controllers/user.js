@@ -89,14 +89,15 @@ const query = async (req, res) => {
 
 const userCart = async (req, res) => {
   try {
-    const { cartData } = req.body;
-    const isCartExists = await cartModel.findOne();
+    const { userId, cartData } = req.body;
+    const isCartExists = await cartModel.findOne({ userId });
     if (isCartExists) {
-      await cartModel.findByIdAndUpdate(isCartExists["_id"], {
-        CartItems: cartData,
-      });
+      isCartExists.userId = userId;
+      isCartExists.CartItems = cartData;
+      await isCartExists.save();
     } else {
       const record = new cartModel({
+        userId,
         CartItems: cartData,
       });
       await record.save();
@@ -120,4 +121,14 @@ const getSearchResult = async (req, res) => {
   }
 };
 
-module.exports = { reg, login, query, userCart, getSearchResult };
+const fetchCart = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const rec = await cartModel.findOne({ userId: id });
+    return res.json({ ok: true, data: rec });
+  } catch (error) {
+    return res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+module.exports = { reg, login, query, userCart, getSearchResult, fetchCart };

@@ -2,18 +2,25 @@ import { useDispatch, useSelector } from "react-redux";
 import CartItems from "../components/CartItems";
 import Modal from "../components/Modal";
 import { useEffect } from "react";
-import { saveCart } from "../../store/slices/CartSlice";
+import { useNavigate } from "react-router-dom";
+import { fetchCart, saveCart } from "../../store/slices/CartSlice";
+import toast from "react-hot-toast";
 
 export default function Cart({ isOpen, setIsOpen }) {
+  const navigate = useNavigate();
   const cartState = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(
-      saveCart({
-        cartData: cartState,
-      })
-    );
-  }, [cartState]);
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("user");
+    if (!token) {
+      toast.error("Please login first");
+      navigate("/");
+      return;
+    }
+    if (userId) dispatch(fetchCart(userId));
+  }, []);
 
   return (
     <Modal

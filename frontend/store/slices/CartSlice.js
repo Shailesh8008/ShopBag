@@ -14,9 +14,23 @@ export const saveCart = createAsyncThunk("cart/save", async (cartData) => {
       },
       body: JSON.stringify(cartData),
     });
-
+    return cartData.cartData;
+  } catch (error) {
+    console.log("Internal server error");
+  }
+});
+export const fetchCart = createAsyncThunk("cart/fetch", async (userId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch(`/api/fetchcart/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await res.json();
-    return data;
+    return data.data?.CartItems || [];
   } catch (error) {
     console.log("Internal server error");
   }
@@ -44,14 +58,25 @@ const slice = createSlice({
       if (state[itemIndex].qt == 1) state.splice(itemIndex, 1);
       else state[itemIndex].qt -= 1;
     },
+    clearCart(state, action) {
+      state.length = 0;
+    },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchCart.fulfilled, (state, action) => {
+      return action.payload;
+    });
     builder.addCase(saveCart.fulfilled, (state, action) => {
-      console.log(action.payload);
+      return action.payload;
     });
   },
 });
 
 export default slice.reducer;
-export const { cartAddItem, cartRemoveItem, cartIncreaseQt, cartDecreaseQt } =
-  slice.actions;
+export const {
+  cartAddItem,
+  cartRemoveItem,
+  cartIncreaseQt,
+  cartDecreaseQt,
+  clearCart,
+} = slice.actions;

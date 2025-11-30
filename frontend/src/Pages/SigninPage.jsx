@@ -3,10 +3,12 @@ import Modal from "../components/Modal";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { clearCart } from "../../store/slices/CartSlice";
+import { useDispatch } from "react-redux";
 
 export default function SigninPage({ isOpen, setIsOpen }) {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [isPass, setIsPass] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -34,6 +36,7 @@ export default function SigninPage({ isOpen, setIsOpen }) {
       if (!data.ok) {
         return toast.error(data.message);
       }
+      dispatch(clearCart());
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", data.data);
       toast.success(data.message);

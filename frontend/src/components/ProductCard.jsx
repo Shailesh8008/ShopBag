@@ -1,8 +1,22 @@
-import { useDispatch } from "react-redux";
-import { cartAddItem } from "../../store/slices/CartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { cartAddItem, saveCart } from "../../store/slices/CartSlice";
+import store from "../../store";
 
 export default function ProductCard({ products }) {
   const dispatch = useDispatch();
+
+  const handleAddItem = (el) => {
+    const products = {
+      pid: el["_id"],
+      pname: el.pname,
+      price: el.price,
+      pimage: el.pimage,
+    };
+    const userId = localStorage.getItem("user");
+    dispatch(cartAddItem(products));
+    const state = store.getState().cart;
+    dispatch(saveCart({ userId, cartData: state }));
+  };
 
   return (
     <>
@@ -30,16 +44,7 @@ export default function ProductCard({ products }) {
             <div className="text-center">
               <button
                 className="border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-semibold rounded-md py-1.5 px-3 active:bg-purple-800 active:border-purple-800 transition-all cursor-pointer"
-                onClick={() =>
-                  dispatch(
-                    cartAddItem({
-                      pid: el["_id"],
-                      pname: el.pname,
-                      price: el.price,
-                      pimage: el.pimage,
-                    })
-                  )
-                }
+                onClick={() => handleAddItem(el)}
               >
                 Add to Cart
               </button>

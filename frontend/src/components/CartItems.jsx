@@ -6,10 +6,18 @@ import {
   cartDecreaseQt,
   cartIncreaseQt,
   cartRemoveItem,
+  saveCart,
 } from "../../store/slices/CartSlice";
+import store from "../../store";
 
 export default function CartItems({ pid, pname, img, price, qt }) {
   const dispatch = useDispatch();
+  const handleDispatch = (callback) => {
+    const userId = localStorage.getItem("user");
+    dispatch(callback({ pid }));
+    const state = store.getState().cart;
+    dispatch(saveCart({ userId, cartData: state }));
+  };
 
   return (
     <li className="flex gap-2 items-center font-semibold py-2">
@@ -26,20 +34,20 @@ export default function CartItems({ pid, pname, img, price, qt }) {
       <div className="flex gap-2">
         <button
           className="bg-purple-500/70 rounded p-1.5 active:bg-purple-500 flex justify-center items-center text-sm cursor-pointer"
-          onClick={() => dispatch(cartDecreaseQt({ pid }))}
+          onClick={() => handleDispatch(cartDecreaseQt)}
         >
           <FaMinus />
         </button>
         <p>{qt}</p>
         <button
           className="bg-purple-500/70 rounded p-1.5 active:bg-purple-500 flex justify-center items-center text-sm cursor-pointer"
-          onClick={() => dispatch(cartIncreaseQt({ pid }))}
+          onClick={() => handleDispatch(cartIncreaseQt)}
         >
           <FaPlus />
         </button>
         <button
           className="text-2xl ml-1 hover:text-red-600 cursor-pointer"
-          onClick={() => dispatch(cartRemoveItem({ pid }))}
+          onClick={() => handleDispatch(cartRemoveItem)}
         >
           <MdDeleteSweep />
         </button>
