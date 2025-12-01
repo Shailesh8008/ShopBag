@@ -3,7 +3,7 @@ import fast_deliver from "../assets/fast-deliver.jpg";
 export default function Home({ isOpen }) {
   return (
     <section className={isOpen ? "overflow-hidden" : ""}>
-      <div className="border border-gray-300 bg-gradient-to-r from-purple-100 via-white to-white mx-5 mt-10 mb-8 sm:mx-8 px-5 space-x-0 lg:space-x-18 lg:px-8 py-6 lg:py-12 rounded-lg lg:flex max-w-7xl">
+      <div className="border border-gray-300 bg-gradient-to-r from-purple-100 via-white to-white mx-4 mt-10 mb-8 sm:mx-8 px-5 space-x-0 lg:space-x-18 lg:px-8 py-6 lg:py-12 rounded-lg lg:flex max-w-7xl">
         <div className="self-center space-y-4">
           <h1 className="text-4xl sm:text-5xl font-semibold">
             Fast Delivery 🚀

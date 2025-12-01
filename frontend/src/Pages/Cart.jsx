@@ -55,6 +55,9 @@ export default function Cart({ isOpen, setIsOpen }) {
             ₹{cartState.reduce((acc, curr) => acc + curr.price * curr.qt, 0)}
           </span>
         </p>
+        <button className="bg-purple-500 rounded-xl py-1 px-2 cursor-pointer mt-2 text-white hover:bg-purple-600 active:bg-purple-700 w-full">
+          Checkout
+        </button>
       </div>
     </Modal>
   );

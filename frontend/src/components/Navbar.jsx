@@ -105,19 +105,44 @@ export default function Navbar({ setIsOpen }) {
             )}
           </div>
           {isBarOpen && (
-            <div className="bg-white shadow p-2 absolute top-8 right-1 space-y-1.5 sm:hidden">
-              <div className="flex text-center cursor-pointer hover:text-purple-600 items-center space-x-1">
-                <IoMdHome />
+            <div className="bg-white shadow shadow-purple-600 rounded-md p-2 absolute top-8 right-1 space-y-1.5 sm:hidden">
+              <Link
+                to={"/"}
+                state={location}
+                className="flex text-center cursor-pointer items-center space-x-1"
+              >
+                <span className="overflow-hidden w-4">
+                  <IoMdHome className="text-[18px]" />
+                </span>
                 <span>Home</span>
-              </div>
-              <div className="flex text-center cursor-pointer hover:text-purple-600 items-center space-x-1">
+              </Link>
+              <Link
+                to={"/cart"}
+                state={location}
+                className="flex text-center cursor-pointer items-center space-x-1"
+                onClick={(e) => setIsOpen(true)}
+              >
                 <FaShoppingCart />
                 <span>Cart</span>
-              </div>
-              <div className="flex text-center cursor-pointer hover:text-purple-600 items-center space-x-1">
+              </Link>
+              <Link
+                to={"/query"}
+                state={location}
+                className="flex text-center cursor-pointer items-center space-x-1"
+                onClick={(e) => setIsOpen(true)}
+              >
+                <LuMessageSquareMore />
+                <span>Query</span>
+              </Link>
+              <Link
+                to={"/signin"}
+                state={location}
+                className="flex text-center cursor-pointer items-center space-x-1"
+                onClick={(e) => setIsOpen(true)}
+              >
                 <FaRegUserCircle />
                 <span>Sign In</span>
-              </div>
+              </Link>
             </div>
           )}
         </div>
