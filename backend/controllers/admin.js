@@ -147,7 +147,7 @@ const queryReply = async (req, res) => {
       secure: false,
       auth: {
         user: "shailesh10thd1@gmail.com",
-        pass: "qyoqgtvusvcikqse",
+        pass: process.env.SMTP_PASS,
       },
     });
     const info = await transporter.sendMail({

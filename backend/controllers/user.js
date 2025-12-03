@@ -2,8 +2,11 @@ const model = require("../models/user");
 const queryModel = require("../models/query");
 const cartModel = require("../models/cart");
 const productModel = require("../models/product");
+const orderModel = require("../models/order");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const Razorpay = require("razorpay");
 
 const reg = async (req, res) => {
   try {
@@ -131,4 +134,62 @@ const fetchCart = async (req, res) => {
   }
 };
 
-module.exports = { reg, login, query, userCart, getSearchResult, fetchCart };
+const checkout = async (req, res) => {
+  const instance = new Razorpay({
+    key_id: process.env.RAZORPAY_ID,
+    key_secret: process.env.RAZORPAY_SECRET_KEY,
+  });
+
+  try {
+    const { amount, currency, receipt } = req.body;
+    const order = await instance.orders.create({
+      amount: amount * 100,
+      currency,
+      receipt,
+    });
+    if (!order) {
+      return res.json({ ok: false, message: "Error creating order" });
+    }
+    return res.json({ ok: true, data: order });
+  } catch (error) {
+    res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+const verifyPayment = async (req, res) => {
+  try {
+    const { amount, userId, orderId, paymentId, signature } = req.body;
+
+    const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_KEY);
+    hmac.update(orderId + "|" + paymentId);
+    const generateSignature = hmac.digest("hex");
+    if (generateSignature === signature) {
+      const rec = new orderModel({
+        userId,
+        orderId,
+        paymentId,
+        signature,
+        amount,
+        status: "paid",
+      });
+      await rec.save();
+
+      return res.json({ ok: true, message: "Payment Success" });
+    } else {
+      return res.json({ ok: false, message: "Payment verification failed" });
+    }
+  } catch (error) {
+    res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
+module.exports = {
+  reg,
+  login,
+  query,
+  userCart,
+  getSearchResult,
+  fetchCart,
+  checkout,
+  verifyPayment,
+};

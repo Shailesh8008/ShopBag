@@ -22,6 +22,69 @@ export default function Cart({ isOpen, setIsOpen }) {
     if (userId) dispatch(fetchCart(userId));
   }, []);
 
+  const handleCheckout = async () => {
+    const amount = cartState.reduce(
+      (acc, curr) => acc + curr.price * curr.qt,
+      0
+    );
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount,
+          currency: "INR",
+          receipt: "receipt#1",
+        }),
+      });
+      const data = await res.json();
+      if (!data) {
+        return toast.error(data.message);
+      }
+      const options = {
+        key: "rzp_test_Rn0muST803pgLU",
+        amount: data.data.amount,
+        currency: data.data.currency,
+        name: "Shopbag",
+        description: "Testing payment",
+        order_id: data.data.id,
+        handler: async function (res) {
+          const token = localStorage.getItem("token");
+          const userId = localStorage.getItem("user");
+          try {
+            const response = await fetch("/api/verifypayment", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                amount,
+                userId,
+                orderId: res.razorpay_order_id,
+                paymentId: res.razorpay_payment_id,
+                signature: res.razorpay_signature,
+              }),
+            });
+            const data1 = await response.json();
+            if (!data1.ok) {
+              return toast.error(data1.message);
+            }
+            return toast.success(data1.message);
+          } catch (error) {
+            return toast.error("Something went wrong");
+          }
+        },
+      };
+      const razorpayWindow = window.Razorpay(options);
+      razorpayWindow.open();
+    } catch (error) {
+      return toast.error("Something went wrong");
+    }
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -55,7 +118,10 @@ export default function Cart({ isOpen, setIsOpen }) {
             ₹{cartState.reduce((acc, curr) => acc + curr.price * curr.qt, 0)}
           </span>
         </p>
-        <button className="bg-purple-500 rounded-xl py-1 px-2 cursor-pointer mt-2 text-white hover:bg-purple-600 active:bg-purple-700 w-full">
+        <button
+          className="bg-purple-500 rounded-xl py-1 px-2 cursor-pointer mt-2 text-white hover:bg-purple-600 active:bg-purple-700 w-full"
+          onClick={handleCheckout}
+        >
           Checkout
         </button>
       </div>

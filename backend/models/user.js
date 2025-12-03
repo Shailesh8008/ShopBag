@@ -9,4 +9,4 @@ const userSchema = new Schema({
   pass: { type: String, require: true },
 });
 
-module.exports = model("user", userSchema)
+module.exports = model("users", userSchema);
