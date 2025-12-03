@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import CartItems from "../components/CartItems";
 import Modal from "../components/Modal";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchCart, saveCart } from "../../store/slices/CartSlice";
+import { fetchCart } from "../../store/slices/CartSlice";
 import toast from "react-hot-toast";
 
 export default function Cart({ isOpen, setIsOpen }) {
+  const [wait, setWait] = useState(false);
   const navigate = useNavigate();
   const cartState = useSelector((state) => state.cart);
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ export default function Cart({ isOpen, setIsOpen }) {
   }, []);
 
   const handleCheckout = async () => {
+    setWait(true);
     const amount = cartState.reduce(
       (acc, curr) => acc + curr.price * curr.qt,
       0
@@ -41,6 +43,7 @@ export default function Cart({ isOpen, setIsOpen }) {
       });
       const data = await res.json();
       if (!data) {
+        setWait(false);
         return toast.error(data.message);
       }
       const options = {
@@ -70,17 +73,22 @@ export default function Cart({ isOpen, setIsOpen }) {
             });
             const data1 = await response.json();
             if (!data1.ok) {
+              setWait(false);
               return toast.error(data1.message);
             }
+            setWait(false);
             return toast.success(data1.message);
           } catch (error) {
+            setWait(false);
             return toast.error("Something went wrong");
           }
         },
       };
       const razorpayWindow = window.Razorpay(options);
       razorpayWindow.open();
+      setWait(false);
     } catch (error) {
+      setWait(false);
       return toast.error("Something went wrong");
     }
   };
@@ -118,12 +126,18 @@ export default function Cart({ isOpen, setIsOpen }) {
             ₹{cartState.reduce((acc, curr) => acc + curr.price * curr.qt, 0)}
           </span>
         </p>
-        <button
-          className="bg-purple-500 rounded-xl py-1 px-2 cursor-pointer mt-2 text-white hover:bg-purple-600 active:bg-purple-700 w-full"
-          onClick={handleCheckout}
-        >
-          Checkout
-        </button>
+        {wait ? (
+          <button className="bg-purple-500 rounded-xl py-1 px-2 cursor-not-allowed mt-2 w-full text-gray-300 opacity-50 border">
+            Checkout
+          </button>
+        ) : (
+          <button
+            className="bg-purple-500 rounded-xl py-1 px-2 cursor-pointer mt-2 text-white hover:bg-purple-600 active:bg-purple-700 w-full"
+            onClick={handleCheckout}
+          >
+            Checkout
+          </button>
+        )}
       </div>
     </Modal>
   );
