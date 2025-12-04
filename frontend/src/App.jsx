@@ -14,6 +14,7 @@ import AddProduct from "./admin/AddProduct";
 import EditProduct from "./admin/EditProduct";
 import QueryReply from "./admin/QueryReply";
 import Search from "./Pages/Search";
+import AdminRoute from "./components/AdminRoute";
 
 export default function App() {
   const location = useLocation();
@@ -22,7 +23,7 @@ export default function App() {
   if (path == "/search") {
     element = <Search />;
   } else {
-    element=<HomePage />
+    element = <HomePage />;
   }
   console.log(path);
   const [isOpen, setIsOpen] = useState(false);
@@ -68,12 +69,54 @@ export default function App() {
             </>
           }
         />
-        <Route path="/admin/dashboard" element={<AdminDash />} />
-        <Route path="/admin/products" element={<AdminProduct />} />
-        <Route path="/admin/query" element={<AdminQuery />} />
-        <Route path="/admin/addproducts" element={<AddProduct />} />
-        <Route path="/admin/editproduct/:id" element={<EditProduct />} />
-        <Route path="/admin/queryreply/:id" element={<QueryReply />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <AdminRoute>
+              <AdminDash />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/products"
+          element={
+            <AdminRoute>
+              <AdminProduct />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/query"
+          element={
+            <AdminRoute>
+              <AdminQuery />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/addproducts"
+          element={
+            <AdminRoute>
+              <AddProduct />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/editproduct/:id"
+          element={
+            <AdminRoute>
+              <EditProduct />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/queryreply/:id"
+          element={
+            <AdminRoute>
+              <QueryReply />
+            </AdminRoute>
+          }
+        />
         <Route path="/search" element={<Search />} />
       </Routes>
       <Footer />

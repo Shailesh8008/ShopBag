@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { clearCart } from "../../store/slices/CartSlice";
 import { useDispatch } from "react-redux";
+import { setUser } from "../../store/slices/AuthSlice";
 
 export default function SigninPage({ isOpen, setIsOpen }) {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function SigninPage({ isOpen, setIsOpen }) {
       if (!data.ok) {
         return toast.error(data.message);
       }
-      dispatch(clearCart());
+      dispatch(setUser({ user: data.userId }));
       toast.success(data.message);
       setIsOpen(false);
       navigate("/");

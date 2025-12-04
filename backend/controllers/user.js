@@ -8,6 +8,8 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
 
+const checkUser = (req, res) => res.json({ ok: true, userId: req.user.id });
+
 const reg = async (req, res) => {
   try {
     const { fname, lname, email, pass1 } = req.body;
@@ -72,6 +74,7 @@ const login = async (req, res) => {
       message: `${
         emailExists.role == "admin" ? "Welcome Admin" : "Login Successfully"
       }`,
+      userId: emailExists._id,
     });
   } catch (error) {
     res.status(500).json({ error });
@@ -191,6 +194,19 @@ const verifyPayment = async (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  try {
+    await res.clearCookie("token", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+    });
+    return res.json({ ok: true, message: "Successfully Logout" });
+  } catch (error) {
+    res.json({ ok: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   reg,
   login,
@@ -200,4 +216,6 @@ module.exports = {
   fetchCart,
   checkout,
   verifyPayment,
+  checkUser,
+  logout,
 };

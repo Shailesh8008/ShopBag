@@ -2,6 +2,8 @@ const model = require("../models/product");
 const queryModel = require("../models/query");
 const nodemailer = require("nodemailer");
 
+const checkAdmin = (req, res) => res.json({ ok: true });
+
 const addproduct = async (req, res) => {
   try {
     const { pname, price, category } = req.body;
@@ -168,6 +170,7 @@ const queryReply = async (req, res) => {
 };
 
 module.exports = {
+  checkAdmin,
   addproduct,
   getProducts,
   deleteProduct,

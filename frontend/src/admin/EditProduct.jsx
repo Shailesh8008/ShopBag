@@ -35,6 +35,7 @@ export default function AddProduct() {
     try {
       const res = await fetch(`/api/editproduct/${params.id}`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(pDetails),
       });

@@ -2,29 +2,55 @@ const apiRouter = require("express").Router();
 const userController = require("../controllers/user");
 const adminController = require("../controllers/admin");
 const { uploads } = require("../middleware/multer");
-const auth = require("../middleware/auth");
-
-apiRouter.get("/", (req, res) => {
-  res.send("path '/' called.");
-});
+const { auth, adminAuth } = require("../middleware/auth");
 
 apiRouter.post("/api/reg", userController.reg);
 apiRouter.post("/api/login", userController.login);
 apiRouter.post(
   "/api/addproduct",
+  auth,
+  adminAuth,
   uploads.single("pimage"),
   adminController.addproduct
 );
+apiRouter.delete(
+  "/api/deleteproduct/:pid",
+  auth,
+  adminAuth,
+  adminController.deleteProduct
+);
+apiRouter.post(
+  "/api/editproduct/:pid",
+  auth,
+  adminAuth,
+  adminController.editProduct
+);
 apiRouter.get("/api/getproducts", adminController.getProducts);
-apiRouter.delete("/api/deleteproduct/:pid", adminController.deleteProduct);
 apiRouter.get("/api/getproduct/:pid", adminController.getOneProduct);
-apiRouter.post("/api/editproduct/:pid", adminController.editProduct);
-apiRouter.post("/api/submitquery", userController.query);
 apiRouter.get("/api/getqueries", adminController.getQueries);
 apiRouter.get("/api/getquerydetails/:qid", adminController.getOneQuery);
-apiRouter.delete("/api/deletequery/:qid", adminController.deleteQuery);
-apiRouter.get("/api/updatestatus/:qid", adminController.updateQuery);
-apiRouter.post("/api/queryreply/:qid", adminController.queryReply);
+apiRouter.delete(
+  "/api/deletequery/:qid",
+  auth,
+  adminAuth,
+  adminController.deleteQuery
+);
+apiRouter.get(
+  "/api/updatestatus/:qid",
+  auth,
+  adminAuth,
+  adminController.updateQuery
+);
+apiRouter.post(
+  "/api/queryreply/:qid",
+  auth,
+  adminAuth,
+  adminController.queryReply
+);
+apiRouter.get("/api/checkadmin", auth, adminAuth, adminController.checkAdmin);
+apiRouter.delete("/api/logout", auth, userController.logout);
+apiRouter.get("/api/auth/user", auth, userController.checkUser);
+apiRouter.post("/api/submitquery", userController.query);
 apiRouter.post("/api/savecart", auth, userController.userCart);
 apiRouter.get("/api/search", userController.getSearchResult);
 apiRouter.get("/api/fetchcart", auth, userController.fetchCart);

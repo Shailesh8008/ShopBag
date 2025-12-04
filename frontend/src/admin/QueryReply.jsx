@@ -38,6 +38,7 @@ export default function QueryReply() {
       setWait(true);
       const res = await fetch(`/api/queryreply/${params.id}`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });

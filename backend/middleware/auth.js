@@ -16,4 +16,11 @@ const auth = (req, res, next) => {
   next();
 };
 
-module.exports = auth;
+const adminAuth = (req, res, next) => {
+  const { role } = req.user;
+  console.log(role);
+  if (role === "admin") return next();
+  return res.json({ ok: false, message: "Only Admin can access this page" });
+};
+
+module.exports = { auth, adminAuth };

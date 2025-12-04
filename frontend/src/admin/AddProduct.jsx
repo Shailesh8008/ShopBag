@@ -23,6 +23,7 @@ export default function AddProduct() {
     try {
       const res = await fetch("/api/addproduct", {
         method: "POST",
+        credentials: "include",
         body: formData,
       });
       const data = await res.json();

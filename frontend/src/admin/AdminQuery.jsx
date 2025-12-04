@@ -33,7 +33,10 @@ export default function AdminQuery() {
 
   const handleDelete = async (qid) => {
     try {
-      const res = await fetch(`/api/deletequery/${qid}`, { method: "DELETE" });
+      const res = await fetch(`/api/deletequery/${qid}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
       const data = await res.json();
       if (!data.ok) {
         return toast.error(data.message || "Cannot delete this query");
@@ -47,7 +50,9 @@ export default function AdminQuery() {
 
   const updateStatus = async (id) => {
     try {
-      const res = await fetch(`/api/updatestatus/${id}`);
+      const res = await fetch(`/api/updatestatus/${id}`, {
+        credentials: "include",
+      });
       const data = await res.json();
       if (!data.ok) {
         return toast.error(data.message);

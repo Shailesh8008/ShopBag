@@ -10,16 +10,46 @@ import { LuMessageSquareMore } from "react-icons/lu";
 import { IoMdHome } from "react-icons/io";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useWindowWidth from "../../hooks/useWindowWidth";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { authenticateUser, clearUser } from "../../store/slices/AuthSlice";
+import { FiLogOut } from "react-icons/fi";
+import toast from "react-hot-toast";
+import { clearCart } from "../../store/slices/CartSlice";
 
 export default function Navbar({ setIsOpen }) {
+  const authState = useSelector((state) => state.auth);
+  console.log(authState);
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
   const windowWidth = useWindowWidth();
+  const dispatch = useDispatch();
 
   const [isBarOpen, setIsBarOpen] = useState(false);
   const onClick = () => {
     setIsBarOpen(!isBarOpen);
+  };
+
+  useEffect(() => {
+    dispatch(authenticateUser());
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("/api/logout", {
+        method: "DELETE",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!data.ok) return toast(data.message || "Failed");
+      dispatch(clearUser());
+      dispatch(clearCart());
+      toast.success(data.message);
+      return navigate("/");
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   };
 
   return (
@@ -81,12 +111,22 @@ export default function Navbar({ setIsOpen }) {
                   className="cursor-pointer hover:text-purple-600"
                 />
               </Link>
-              <Link to={"/signin"} state={location}>
-                <FaRegUserCircle
-                  onClick={(e) => setIsOpen(true)}
-                  className="cursor-pointer hover:text-purple-600"
-                />
-              </Link>
+              {authState.user ? (
+                <Link
+                  to={"/"}
+                  className="cursor-pointer hover:text-red-600"
+                  onClick={handleLogout}
+                >
+                  <FiLogOut />
+                </Link>
+              ) : (
+                <Link to={"/signin"} state={location}>
+                  <FaRegUserCircle
+                    onClick={(e) => setIsOpen(true)}
+                    className="cursor-pointer hover:text-purple-600"
+                  />
+                </Link>
+              )}
             </div>
           </div>
 
