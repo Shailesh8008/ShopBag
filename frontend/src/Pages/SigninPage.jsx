@@ -30,6 +30,7 @@ export default function SigninPage({ isOpen, setIsOpen }) {
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(form),
       });
       const data = await res.json();
@@ -37,8 +38,6 @@ export default function SigninPage({ isOpen, setIsOpen }) {
         return toast.error(data.message);
       }
       dispatch(clearCart());
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", data.data);
       toast.success(data.message);
       setIsOpen(false);
       navigate("/");

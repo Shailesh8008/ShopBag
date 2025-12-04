@@ -27,8 +27,8 @@ apiRouter.get("/api/updatestatus/:qid", adminController.updateQuery);
 apiRouter.post("/api/queryreply/:qid", adminController.queryReply);
 apiRouter.post("/api/savecart", auth, userController.userCart);
 apiRouter.get("/api/search", userController.getSearchResult);
-apiRouter.get("/api/fetchcart/:id", auth, userController.fetchCart);
+apiRouter.get("/api/fetchcart", auth, userController.fetchCart);
 apiRouter.post("/api/checkout", userController.checkout);
-apiRouter.post("/api/verifypayment", userController.verifyPayment);
+apiRouter.post("/api/verifypayment", auth, userController.verifyPayment);
 
 module.exports = apiRouter;

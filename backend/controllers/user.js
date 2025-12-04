@@ -53,18 +53,25 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: emailExists["_id"] },
+      { id: emailExists["_id"], role: emailExists.role },
       process.env.JWT_SECRET_KEY,
       {
-        expiresIn: "2d",
+        expiresIn: "7d",
       }
     );
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     return res.json({
       ok: true,
-      message: "Login Successful!",
-      token,
-      data: emailExists["_id"],
+      message: `${
+        emailExists.role == "admin" ? "Welcome Admin" : "Login Successfully"
+      }`,
     });
   } catch (error) {
     res.status(500).json({ error });
@@ -92,7 +99,8 @@ const query = async (req, res) => {
 
 const userCart = async (req, res) => {
   try {
-    const { userId, cartData } = req.body;
+    const userId = req.user.id;
+    const { cartData } = req.body;
     const isCartExists = await cartModel.findOne({ userId });
     if (isCartExists) {
       isCartExists.userId = userId;
@@ -126,7 +134,7 @@ const getSearchResult = async (req, res) => {
 
 const fetchCart = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.user;
     const rec = await cartModel.findOne({ userId: id });
     return res.json({ ok: true, data: rec });
   } catch (error) {

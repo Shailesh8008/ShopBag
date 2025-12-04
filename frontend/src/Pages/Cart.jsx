@@ -7,23 +7,28 @@ import { fetchCart } from "../../store/slices/CartSlice";
 import toast from "react-hot-toast";
 
 export default function Cart({ isOpen, setIsOpen }) {
+  const [userExists, setUserExists] = useState(false);
   const [wait, setWait] = useState(false);
   const navigate = useNavigate();
   const cartState = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("user");
-    if (!token) {
-      toast.error("Please login first");
-      navigate("/");
-      return;
-    }
-    if (userId) dispatch(fetchCart(userId));
+    dispatch(fetchCart())
+      .unwrap()
+      .then(() => setUserExists(true))
+      .catch((err) => {
+        if (err.error) {
+          setUserExists(false);
+        }
+      });
   }, []);
 
   const handleCheckout = async () => {
+    if (!userExists) {
+      toast("Please login first", { icon: " ℹ️" });
+      return navigate("/signin");
+    }
     setWait(true);
     const amount = cartState.reduce(
       (acc, curr) => acc + curr.price * curr.qt,
@@ -54,14 +59,12 @@ export default function Cart({ isOpen, setIsOpen }) {
         description: "Testing payment",
         order_id: data.data.id,
         handler: async function (res) {
-          const token = localStorage.getItem("token");
           const userId = localStorage.getItem("user");
           try {
             const response = await fetch("/api/verifypayment", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify({
                 amount,

@@ -5,13 +5,12 @@ const findItemIndex = (state, action) =>
 
 export const saveCart = createAsyncThunk("cart/save", async (cartData) => {
   try {
-    const token = localStorage.getItem("token");
-    const res = await fetch("/api/savecart", {
+    await fetch("/api/savecart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
+      credentials: "include",
       body: JSON.stringify(cartData),
     });
     return cartData.cartData;
@@ -19,22 +18,27 @@ export const saveCart = createAsyncThunk("cart/save", async (cartData) => {
     console.log("Internal server error");
   }
 });
-export const fetchCart = createAsyncThunk("cart/fetch", async (userId) => {
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch(`/api/fetchcart/${userId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await res.json();
-    return data.data?.CartItems || [];
-  } catch (error) {
-    console.log("Internal server error");
+export const fetchCart = createAsyncThunk(
+  "cart/fetch",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/fetchcart`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        return rejectWithValue({
+          error: true,
+          message: data.message || "Unauthorized",
+        });
+      }
+      return data.data?.CartItems || [];
+    } catch (error) {
+      console.log("Internal server error");
+    }
   }
-});
+);
 
 const slice = createSlice({
   name: "cart",

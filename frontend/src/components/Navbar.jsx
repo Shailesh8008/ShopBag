@@ -66,7 +66,9 @@ export default function Navbar({ setIsOpen }) {
           </div>
           <div className="hidden sm:block">
             <div className="flex gap-3 text-xl items-center">
-              <IoMdHome className="cursor-pointer hover:text-purple-600 text-[22px]" />
+              <Link to={"/"} state={location}>
+                <IoMdHome className="cursor-pointer hover:text-purple-600 text-[22px]" />
+              </Link>
               <Link to={"/query"} state={location}>
                 <LuMessageSquareMore
                   onClick={(e) => setIsOpen(true)}

@@ -13,10 +13,9 @@ import store from "../../store";
 export default function CartItems({ pid, pname, img, price, qt }) {
   const dispatch = useDispatch();
   const handleDispatch = (callback) => {
-    const userId = localStorage.getItem("user");
     dispatch(callback({ pid }));
     const state = store.getState().cart;
-    dispatch(saveCart({ userId, cartData: state }));
+    dispatch(saveCart({ cartData: state }));
   };
 
   return (

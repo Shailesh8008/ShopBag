@@ -4,8 +4,6 @@ import { useLocation } from "react-router-dom";
 import ProductCard from "./ProductCard";
 
 export default function Products() {
-  const location = useLocation();
-  const path = location.pathname;
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
