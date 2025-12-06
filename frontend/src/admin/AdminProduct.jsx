@@ -4,13 +4,14 @@ import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function AdminProduct() {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   const getProducts = async () => {
     try {
-      const res = await fetch("/api/getproducts");
+      const res = await fetch(`${backendUrl}/api/getproducts`);
       const data = await res.json();
       if (!data.ok) {
         toast.error(data.message);
@@ -27,8 +28,9 @@ export default function AdminProduct() {
 
   const handleDelete = async (pid, pname) => {
     try {
-      const res = await fetch(`/api/deleteproduct/${pid}`, {
+      const res = await fetch(`${backendUrl}/api/deleteproduct/${pid}`, {
         method: "DELETE",
+        credentials: "include",
       });
       const data = await res.json();
       if (!data.ok) {
@@ -63,7 +65,7 @@ export default function AdminProduct() {
                   className="shadow rounded-xl hover:shadow-lg border border-gray-100 p-4"
                 >
                   <img
-                    src={`/uploads/${e.pimage}`}
+                    src={`${backendUrl}/uploads/${e.pimage}`}
                     alt={e.pimage}
                     className="w-full h-50 object-contain justify-self-center rounded-md border border-gray-300"
                   />

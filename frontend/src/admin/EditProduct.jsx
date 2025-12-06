@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AdminNav from "./AdminNav";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 export default function AddProduct() {
   const [pDetails, setPDetails] = useState({
@@ -15,7 +16,7 @@ export default function AddProduct() {
 
   const getProductData = async (pid) => {
     try {
-      const res = await fetch(`/api/getproduct/${pid}`);
+      const res = await fetch(`${backendUrl}/api/getproduct/${pid}`);
       const data = await res.json();
       if (!data) {
         return toast.error(data.message);
@@ -33,7 +34,7 @@ export default function AddProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/editproduct/${params.id}`, {
+      const res = await fetch(`${backendUrl}/api/editproduct/${params.id}`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

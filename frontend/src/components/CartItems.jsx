@@ -9,6 +9,7 @@ import {
   saveCart,
 } from "../../store/slices/CartSlice";
 import store from "../../store";
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 export default function CartItems({ pid, pname, img, price, qt }) {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ export default function CartItems({ pid, pname, img, price, qt }) {
       <Link>
         <img
           className="w-20 h-12 object-contain"
-          src={`/uploads/${img}`}
+          src={`${backendUrl}/uploads/${img}`}
           alt=""
         />
       </Link>

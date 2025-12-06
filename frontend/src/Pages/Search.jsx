@@ -1,17 +1,16 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
-import toast from "react-hot-toast";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function Search() {
   const [products, setProducts] = useState([]);
-  const [tempProducts, setTempProducts] = useState([]);
   const [searchParams] = useSearchParams();
   const searchInput = searchParams.get("query") || "";
 
   const getProducts = async (search) => {
     try {
-      const res = await fetch(`/api/search?query=${search}`);
+      const res = await fetch(`${backendUrl}/api/search?query=${search}`);
       const data = await res.json();
       if (!data.ok) return;
       return setProducts(data.data);

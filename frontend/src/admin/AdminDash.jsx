@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import AdminNav from "./AdminNav";
 import { FcComboChart } from "react-icons/fc";
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 export default function AdminDash() {
   const [products, setProducts] = useState([]);
 
   const getProducts = async () => {
     try {
-      const res = await fetch("/api/getproducts");
+      const res = await fetch(`${backendUrl}/api/getproducts`);
       const data = await res.json();
       if (!data.ok) {
         toast.error(data.message);

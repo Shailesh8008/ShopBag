@@ -2,6 +2,7 @@ import { useState } from "react";
 import AdminNav from "./AdminNav";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 export default function AddProduct() {
   const [productDetails, setProductDetails] = useState({
@@ -21,7 +22,7 @@ export default function AddProduct() {
     formData.append("pimage", pImage);
 
     try {
-      const res = await fetch("/api/addproduct", {
+      const res = await fetch(`${backendUrl}/api/addproduct`, {
         method: "POST",
         credentials: "include",
         body: formData,

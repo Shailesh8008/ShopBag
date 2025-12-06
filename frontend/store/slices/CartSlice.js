@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const findItemIndex = (state, action) =>
   state.findIndex((el) => el.pid == action.payload.pid);
 
 export const saveCart = createAsyncThunk("cart/save", async (cartData) => {
   try {
-    await fetch("/api/savecart", {
+    await fetch(`${backendUrl}/api/savecart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +23,7 @@ export const fetchCart = createAsyncThunk(
   "cart/fetch",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await fetch(`/api/fetchcart`, {
+      const res = await fetch(`${backendUrl}/api/fetchcart`, {
         method: "GET",
         credentials: "include",
       });

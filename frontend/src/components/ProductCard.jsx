@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { cartAddItem, saveCart } from "../../store/slices/CartSlice";
 import store from "../../store";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function ProductCard({ products }) {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ export default function ProductCard({ products }) {
           >
             <div className="mb-2">
               <img
-                src={`/uploads/${el.pimage}`}
+                src={`${backendUrl}/uploads/${el.pimage}`}
                 alt={el.pimage}
                 className="w-full h-40 object-contain rounded-md border border-gray-300 bg-white"
               />

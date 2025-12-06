@@ -3,6 +3,7 @@ import { toast } from "react-hot-toast";
 import Modal from "../components/Modal";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 export default function Signup({ isOpen, setIsOpen }) {
   const [form, setForm] = useState({
@@ -48,7 +49,7 @@ export default function Signup({ isOpen, setIsOpen }) {
     if (form.pass1 !== form.pass2) return setError({ ...error, pass: true });
 
     try {
-      const res = await fetch("/api/reg", {
+      const res = await fetch(`${backendUrl}/api/reg`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

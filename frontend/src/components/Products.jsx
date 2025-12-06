@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Category from "./Category";
-import { useLocation } from "react-router-dom";
 import ProductCard from "./ProductCard";
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -9,7 +9,7 @@ export default function Products() {
 
   const getProducts = async () => {
     try {
-      const res = await fetch("/api/getproducts");
+      const res = await fetch(`${backendUrl}/api/getproducts`);
       const data = await res.json();
       if (!data.ok) {
         return setProducts([]);

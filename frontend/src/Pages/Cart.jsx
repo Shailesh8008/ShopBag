@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchCart } from "../../store/slices/CartSlice";
 import toast from "react-hot-toast";
 const RazorpayID = import.meta.env.VITE_RAZORPAY_ID;
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function Cart({ isOpen, setIsOpen }) {
   const [userExists, setUserExists] = useState(false);
@@ -37,7 +38,7 @@ export default function Cart({ isOpen, setIsOpen }) {
         0
       );
       const receipt = "receipt#" + Date.now();
-      const res = await fetch("/api/checkout", {
+      const res = await fetch(`${backendUrl}/api/checkout`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -66,7 +67,7 @@ export default function Cart({ isOpen, setIsOpen }) {
         },
         handler: async function (res) {
           try {
-            const response = await fetch("/api/verifypayment", {
+            const response = await fetch(`${backendUrl}/api/verifypayment`, {
               method: "POST",
               credentials: "include",
               headers: {

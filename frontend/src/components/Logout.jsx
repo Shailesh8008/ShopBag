@@ -4,6 +4,7 @@ import { clearUser } from "../../store/slices/AuthSlice";
 import { clearCart } from "../../store/slices/CartSlice";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function Logout({ isOpen, setIsOpen }) {
   const dispatch = useDispatch();
@@ -11,7 +12,7 @@ export default function Logout({ isOpen, setIsOpen }) {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("/api/logout", {
+      const res = await fetch(`${backendUrl}/api/logout`, {
         method: "DELETE",
         credentials: "include",
       });

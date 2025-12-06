@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import { useState } from "react";
 import toast from "react-hot-toast";
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 export default function QueryPage({ isOpen, setIsOpen }) {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ export default function QueryPage({ isOpen, setIsOpen }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/submitquery", {
+      const res = await fetch(`${backendUrl}/api/submitquery`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

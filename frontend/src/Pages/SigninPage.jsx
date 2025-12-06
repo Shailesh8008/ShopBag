@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/AuthSlice";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function SigninPage({ isOpen, setIsOpen }) {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export default function SigninPage({ isOpen, setIsOpen }) {
     }
 
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch(`${backendUrl}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

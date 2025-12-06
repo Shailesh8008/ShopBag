@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function AdminRoute({ children }) {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    fetch("/api/checkadmin", { credentials: "include" })
+    fetch(`${backendUrl}/api/checkadmin`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         if (data.ok) return setIsAdmin(true);

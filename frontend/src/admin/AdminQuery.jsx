@@ -4,6 +4,7 @@ import { FcVoicePresentation } from "react-icons/fc";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 export default function AdminQuery() {
   const [queries, setQueries] = useState([]);
@@ -12,7 +13,7 @@ export default function AdminQuery() {
 
   const getQueries = async () => {
     try {
-      const res = await fetch("/api/getqueries");
+      const res = await fetch(`${backendUrl}/api/getqueries`);
       const data = await res.json();
       if (!data.ok) {
         toast.error(data.message);
@@ -33,7 +34,7 @@ export default function AdminQuery() {
 
   const handleDelete = async (qid) => {
     try {
-      const res = await fetch(`/api/deletequery/${qid}`, {
+      const res = await fetch(`${backendUrl}/api/deletequery/${qid}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -50,7 +51,7 @@ export default function AdminQuery() {
 
   const updateStatus = async (id) => {
     try {
-      const res = await fetch(`/api/updatestatus/${id}`, {
+      const res = await fetch(`${backendUrl}/api/updatestatus/${id}`, {
         credentials: "include",
       });
       const data = await res.json();

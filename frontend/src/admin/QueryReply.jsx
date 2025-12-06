@@ -3,6 +3,7 @@ import { FcVoicePresentation } from "react-icons/fc";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminNav from "./AdminNav";
 import toast from "react-hot-toast";
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 export default function QueryReply() {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ export default function QueryReply() {
 
   const getQueryDetails = async (id) => {
     try {
-      const res = await fetch(`/api/getquerydetails/${id}`);
+      const res = await fetch(`${backendUrl}/api/getquerydetails/${id}`);
       const data = await res.json();
       if (!data.ok) {
         return toast.error(data.message);
@@ -36,7 +37,7 @@ export default function QueryReply() {
     if (wait) return;
     try {
       setWait(true);
-      const res = await fetch(`/api/queryreply/${params.id}`, {
+      const res = await fetch(`${backendUrl}/api/queryreply/${params.id}`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
