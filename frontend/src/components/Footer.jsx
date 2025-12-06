@@ -7,7 +7,7 @@ import {
   FaRegCopyright,
 } from "react-icons/fa";
 
-export default function Footer() {
+export default function Footer({ setIsOpen }) {
   return (
     <footer className="mt-14 px-6 sm:px-8 pt-4 pb-4 bg-gradient-to-r from-purple-100 via-white to-white border border-gray-100">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-24 pb-2">
@@ -19,7 +19,7 @@ export default function Footer() {
             delivery. Thank you for choosing us!
           </p>
         </div>
-        <div className="">
+        <div>
           <h1 className="text-lg font-semibold">Quick Links</h1>
           <div className="flex flex-col text-[14px] pl-1 mt-1 w-fit">
             <Link to={"/"} className="hover:text-purple-600">
@@ -28,8 +28,8 @@ export default function Footer() {
             <Link to={"/about"} className="hover:text-purple-600">
               About
             </Link>
-            <Link to={"/contact"} className="hover:text-purple-600">
-              Contact
+            <Link to={"/query"} className="hover:text-purple-600">
+              <p onClick={() => setIsOpen(true)}>Contact</p>
             </Link>
             <Link to={"/t&c"} className="hover:text-purple-600">
               T&C

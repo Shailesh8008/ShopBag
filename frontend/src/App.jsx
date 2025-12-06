@@ -15,6 +15,7 @@ import EditProduct from "./admin/EditProduct";
 import QueryReply from "./admin/QueryReply";
 import Search from "./Pages/Search";
 import AdminRoute from "./components/AdminRoute";
+import Logout from "./components/Logout";
 
 export default function App() {
   const location = useLocation();
@@ -117,8 +118,17 @@ export default function App() {
           }
         />
         <Route path="/search" element={<Search />} />
+        <Route
+          path="/logout"
+          element={
+            <>
+              <Logout isOpen={isOpen} setIsOpen={setIsOpen} />
+              <HomePage />
+            </>
+          }
+        />
       </Routes>
-      <Footer />
+      <Footer setIsOpen={setIsOpen} />
     </>
   );
 }

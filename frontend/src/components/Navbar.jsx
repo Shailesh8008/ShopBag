@@ -16,7 +16,7 @@ import { authenticateUser } from "../../store/slices/AuthSlice";
 import { FiLogOut } from "react-icons/fi";
 import Logout from "./Logout";
 
-export default function Navbar({ isOpen, setIsOpen }) {
+export default function Navbar({ setIsOpen }) {
   const authState = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const location = useLocation();
@@ -93,13 +93,12 @@ export default function Navbar({ isOpen, setIsOpen }) {
                 />
               </Link>
               {authState.user ? (
-                <>
+                <Link to={"/logout"} state={location}>
                   <FiLogOut
                     className="cursor-pointer hover:text-red-600"
                     onClick={() => setIsOpen(true)}
                   />
-                  <Logout isOpen={isOpen} setIsOpen={setIsOpen} />
-                </>
+                </Link>
               ) : (
                 <Link to={"/signin"} state={location}>
                   <FaRegUserCircle

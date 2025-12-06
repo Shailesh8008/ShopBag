@@ -20,7 +20,8 @@ export default function Logout({ isOpen, setIsOpen }) {
       dispatch(clearUser());
       dispatch(clearCart());
       toast.success(data.message);
-      return navigate("/");
+      navigate("/");
+      return setIsOpen(false);
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -37,7 +38,10 @@ export default function Logout({ isOpen, setIsOpen }) {
       <div className="flex justify-between w-full sm:px-3 mt-8 mb-2">
         <button
           className="bg-red-500 rounded-lg py-1 px-2 cursor-pointer mt-2 text-white hover:bg-red-600 active:bg-red-700"
-          onClick={() => setIsOpen(false)}
+          onClick={() => {
+            navigate("/");
+            setIsOpen(false);
+          }}
         >
           Cancel
         </button>

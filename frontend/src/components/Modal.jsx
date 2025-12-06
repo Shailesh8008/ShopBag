@@ -11,7 +11,6 @@ export default function Modal({
 }) {
   const navigate = useNavigate();
 
-  document.body.style.overflow = isOpen ? "hidden" : "visible";
   return createPortal(
     <>
       <div
@@ -19,7 +18,7 @@ export default function Modal({
           setIsOpen(false);
           navigate("/");
         }}
-        className={`absolute top-0 backdrop-blur-xs bg-gray-400/25 w-full h-full content-center px-4 ${
+        className={`fixed inset-0 backdrop-blur-xs bg-gray-400/25 w-full h-full content-center px-4 ${
           isOpen ? "" : "hidden"
         } `}
       >
