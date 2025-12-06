@@ -18,7 +18,6 @@ const auth = (req, res, next) => {
 
 const adminAuth = (req, res, next) => {
   const { role } = req.user;
-  console.log(role);
   if (role === "admin") return next();
   return res.json({ ok: false, message: "Only Admin can access this page" });
 };

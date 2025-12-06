@@ -64,8 +64,8 @@ const login = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: process.env.ENV === "prod",
+      sameSite: process.env.ENV === "prod" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -87,7 +87,6 @@ const query = async (req, res) => {
     if (!username || !email || !query) {
       return res.json({ ok: false, message: "All fields are required" });
     }
-    console.log(queryModel.find());
     const record = new queryModel({
       username: username,
       email: email,
@@ -205,8 +204,8 @@ const logout = async (req, res) => {
   try {
     await res.clearCookie("token", {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: process.env.ENV === "prod",
+      sameSite: process.env.ENV === "prod" ? "none" : "lax",
     });
     return res.json({ ok: true, message: "Successfully Logout" });
   } catch (error) {
