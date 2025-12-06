@@ -11,7 +11,7 @@ connectDB();
 const bcrypt = require("bcrypt");
 const userModel = require("./models/user");
 
-app.use(cors());
+app.use(cors({ origin: "https://shopbag0.netlify.app/" }));
 app.use(express.json());
 app.use(cookieParser());
 app.use("/", apiRouter);
