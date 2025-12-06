@@ -25,12 +25,11 @@ export default function App() {
   } else {
     element = <HomePage />;
   }
-  console.log(path);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      <Navbar setIsOpen={setIsOpen} />
+      <Navbar setIsOpen={setIsOpen} isOpen={isOpen} />
       <Routes>
         <Route path="/" element={<HomePage isOpen={isOpen} />} />
         <Route

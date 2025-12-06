@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
+import toast from "react-hot-toast";
 
 export default function Search() {
   const [products, setProducts] = useState([]);
@@ -12,9 +13,7 @@ export default function Search() {
     try {
       const res = await fetch(`/api/search?query=${search}`);
       const data = await res.json();
-      if (!data.ok) {
-        return console.log(data.message);
-      }
+      if (!data.ok) return;
       return setProducts(data.data);
     } catch (error) {
       console.log("Internal server error");

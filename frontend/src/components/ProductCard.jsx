@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { cartAddItem, saveCart } from "../../store/slices/CartSlice";
 import store from "../../store";
 
@@ -12,10 +12,9 @@ export default function ProductCard({ products }) {
       price: el.price,
       pimage: el.pimage,
     };
-    const userId = localStorage.getItem("user");
     dispatch(cartAddItem(products));
     const state = store.getState().cart;
-    dispatch(saveCart({ userId, cartData: state }));
+    dispatch(saveCart({ cartData: state }));
   };
 
   return (

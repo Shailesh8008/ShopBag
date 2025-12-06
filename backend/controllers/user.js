@@ -153,15 +153,21 @@ const checkout = async (req, res) => {
 
   try {
     const { amount, currency, receipt } = req.body;
+    const { id } = req.user;
+    const { fname, lname, email } = await model.findById(id);
     const order = await instance.orders.create({
       amount: amount * 100,
       currency,
       receipt,
+      notes: {
+        name: fname.concat(" ", lname),
+        userId: id,
+      },
     });
     if (!order) {
       return res.json({ ok: false, message: "Error creating order" });
     }
-    return res.json({ ok: true, data: order });
+    return res.json({ ok: true, data: order, email });
   } catch (error) {
     res.json({ ok: false, message: "Internal server error" });
   }
@@ -169,7 +175,8 @@ const checkout = async (req, res) => {
 
 const verifyPayment = async (req, res) => {
   try {
-    const { amount, userId, orderId, paymentId, signature } = req.body;
+    const { amount, orderId, paymentId, signature } = req.body;
+    const userId = req.user.id;
 
     const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_KEY);
     hmac.update(orderId + "|" + paymentId);

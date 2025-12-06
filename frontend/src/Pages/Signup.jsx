@@ -22,6 +22,8 @@ export default function Signup({ isOpen, setIsOpen }) {
   });
   const [isPass, setIsPass] = useState(false);
 
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
     setError({ ...error, [e.target.id]: false, pass: false });
@@ -37,6 +39,10 @@ export default function Signup({ isOpen, setIsOpen }) {
         pass1: form.pass1 ? false : true,
         pass2: form.pass2 ? false : true,
       });
+    }
+
+    if (!isValidEmail(form.email)) {
+      return toast.error("Please enter a valid email");
     }
 
     if (form.pass1 !== form.pass2) return setError({ ...error, pass: true });

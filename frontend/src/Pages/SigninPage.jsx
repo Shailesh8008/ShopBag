@@ -3,7 +3,6 @@ import Modal from "../components/Modal";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { clearCart } from "../../store/slices/CartSlice";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/AuthSlice";
 
@@ -43,7 +42,7 @@ export default function SigninPage({ isOpen, setIsOpen }) {
       setIsOpen(false);
       navigate("/");
     } catch (error) {
-      console.log("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 

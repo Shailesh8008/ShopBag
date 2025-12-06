@@ -14,8 +14,9 @@ export default function Footer() {
         <div>
           <h1 className="text-xl">ShopBag</h1>
           <p className="text-[15px] mt-4">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea nisi
-            placeat ex labore voluptatum fugiat cumque ut sint maxime illum.
+            From checkout to doorstep, we ensure speed, safety, and
+            satisfaction. Together, we are redefining convenience in every
+            delivery. Thank you for choosing us!
           </p>
         </div>
         <div className="">
@@ -54,10 +55,8 @@ export default function Footer() {
         </div>
       </div>
       <div className="mt-6 pt-3 flex gap-1 justify-center items-center text-gray-500 text-sm border-t border-gray-600">
-          <FaRegCopyright />
-        <p>
-          2025 ShopBag Private Limited
-        </p>
+        <FaRegCopyright />
+        <p>2025 ShopBag Private Limited</p>
       </div>
     </footer>
   );

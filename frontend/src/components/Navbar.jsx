@@ -12,14 +12,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import useWindowWidth from "../../hooks/useWindowWidth";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { authenticateUser, clearUser } from "../../store/slices/AuthSlice";
+import { authenticateUser } from "../../store/slices/AuthSlice";
 import { FiLogOut } from "react-icons/fi";
-import toast from "react-hot-toast";
-import { clearCart } from "../../store/slices/CartSlice";
+import Logout from "./Logout";
 
-export default function Navbar({ setIsOpen }) {
+export default function Navbar({ isOpen, setIsOpen }) {
   const authState = useSelector((state) => state.auth);
-  console.log(authState);
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
@@ -34,23 +32,6 @@ export default function Navbar({ setIsOpen }) {
   useEffect(() => {
     dispatch(authenticateUser());
   }, []);
-
-  const handleLogout = async () => {
-    try {
-      const res = await fetch("/api/logout", {
-        method: "DELETE",
-        credentials: "include",
-      });
-      const data = await res.json();
-      if (!data.ok) return toast(data.message || "Failed");
-      dispatch(clearUser());
-      dispatch(clearCart());
-      toast.success(data.message);
-      return navigate("/");
-    } catch (error) {
-      toast.error("Something went wrong");
-    }
-  };
 
   return (
     <>
@@ -112,13 +93,13 @@ export default function Navbar({ setIsOpen }) {
                 />
               </Link>
               {authState.user ? (
-                <Link
-                  to={"/"}
-                  className="cursor-pointer hover:text-red-600"
-                  onClick={handleLogout}
-                >
-                  <FiLogOut />
-                </Link>
+                <>
+                  <FiLogOut
+                    className="cursor-pointer hover:text-red-600"
+                    onClick={() => setIsOpen(true)}
+                  />
+                  <Logout isOpen={isOpen} setIsOpen={setIsOpen} />
+                </>
               ) : (
                 <Link to={"/signin"} state={location}>
                   <FaRegUserCircle

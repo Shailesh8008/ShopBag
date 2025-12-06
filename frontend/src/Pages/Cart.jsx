@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchCart } from "../../store/slices/CartSlice";
 import toast from "react-hot-toast";
+const RazorpayID = import.meta.env.VITE_RAZORPAY_ID;
 
 export default function Cart({ isOpen, setIsOpen }) {
   const [userExists, setUserExists] = useState(false);
@@ -30,45 +31,49 @@ export default function Cart({ isOpen, setIsOpen }) {
       return navigate("/signin");
     }
     setWait(true);
-    const amount = cartState.reduce(
-      (acc, curr) => acc + curr.price * curr.qt,
-      0
-    );
     try {
+      const amount = cartState.reduce(
+        (acc, curr) => acc + curr.price * curr.qt,
+        0
+      );
+      const receipt = "receipt#" + Date.now();
       const res = await fetch("/api/checkout", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           amount,
           currency: "INR",
-          receipt: "receipt#1",
+          receipt,
         }),
       });
       const data = await res.json();
-      if (!data) {
+      if (!data.ok) {
         setWait(false);
         return toast.error(data.message);
       }
       const options = {
-        key: "rzp_test_Rn0muST803pgLU",
+        key: RazorpayID,
         amount: data.data.amount,
         currency: data.data.currency,
         name: "Shopbag",
-        description: "Testing payment",
         order_id: data.data.id,
+        prefill: {
+          name: "",
+          email: data.email,
+        },
         handler: async function (res) {
-          const userId = localStorage.getItem("user");
           try {
             const response = await fetch("/api/verifypayment", {
               method: "POST",
+              credentials: "include",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 amount,
-                userId,
                 orderId: res.razorpay_order_id,
                 paymentId: res.razorpay_payment_id,
                 signature: res.razorpay_signature,

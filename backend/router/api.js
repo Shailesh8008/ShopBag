@@ -54,7 +54,7 @@ apiRouter.post("/api/submitquery", userController.query);
 apiRouter.post("/api/savecart", auth, userController.userCart);
 apiRouter.get("/api/search", userController.getSearchResult);
 apiRouter.get("/api/fetchcart", auth, userController.fetchCart);
-apiRouter.post("/api/checkout", userController.checkout);
+apiRouter.post("/api/checkout", auth, userController.checkout);
 apiRouter.post("/api/verifypayment", auth, userController.verifyPayment);
 
 module.exports = apiRouter;

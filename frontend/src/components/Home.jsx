@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import fast_deliver from "../assets/fast-deliver.jpg";
 
 export default function Home({ isOpen }) {
@@ -9,14 +10,18 @@ export default function Home({ isOpen }) {
             Fast Delivery 🚀
           </h1>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere
-            adipisci nostrum unde in blanditiis voluptatum suscipit distinctio
-            quibusdam deleniti corporis!
+            Get what you love delivered fast — premium products, seamless
+            shopping, and speed that never slows down. Enjoy a hassle-free
+            experience where every order arrives right on time. Your convenience
+            is our priority!
           </p>
           <div className="text-center lg:text-start">
-            <button className="py-1 px-2 rounded-full cursor-pointer outline outline-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white transition-all">
+            <Link
+              to={"/search"}
+              className="py-1 px-2 rounded-full cursor-pointer outline outline-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white transition-all"
+            >
               Shop Now
-            </button>
+            </Link>
           </div>
         </div>
         <div className="max-w-lg rounded-lg overflow-hidden border border-gray-200 self-center mt-5 lg:mt-0 justify-self-center">
