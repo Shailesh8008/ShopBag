@@ -34,11 +34,11 @@ export default function ProductCard({ products }) {
               />
             </div>
             <p className="font-semibold text-lg">{el.pname}</p>
-            <p className="font-semibold text-purple-600 ml-0.5">$ {el.price}</p>
+            <p className="font-semibold text-purple-600 ml-0.5">₹ {el.price}</p>
             <p className={"font-semibold mb-1"}>{el.category}</p>
             <p className="text-sm text-gray-600 mb-3">
               {!el.desc
-                ? `Get this ${el.pname} at just rupee ${el.price}`
+                ? `Get this ${el.pname} at just rupees ${el.price}`
                 : el.desc}
             </p>
             <div className="text-center">

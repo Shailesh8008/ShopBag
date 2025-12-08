@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import AdminNav from "./AdminNav";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-const backendUrl = import.meta.env.VITE_BACKEND_URL
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-export default function AddProduct() {
+export default function EditProduct({ id }) {
+  const [wait, setWait] = useState(false);
   const [pDetails, setPDetails] = useState({
     pname: "",
     price: "",
@@ -28,11 +29,14 @@ export default function AddProduct() {
   };
 
   useEffect(() => {
-    getProductData(params.id);
+    console.log(id);
+    getProductData(params.id || id);
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (wait) return;
+    setWait(true);
     try {
       const res = await fetch(`${backendUrl}/api/editproduct/${params.id}`, {
         method: "POST",
@@ -42,11 +46,14 @@ export default function AddProduct() {
       });
       const data = await res.json();
       if (!data.ok) {
+        setWait(false);
         return toast.error(data.message);
       }
       toast.success(data.message);
+      setWait(false);
       return setPDetails({ pname: "", price: "", category: "", status: "" });
     } catch (error) {
+      setWait(false);
       return toast.error("Internal server error");
     }
   };
@@ -69,7 +76,7 @@ export default function AddProduct() {
           Back
         </button>
         <div className="shadow-lg px-4 py-6 rounded max-w-3xl mx-auto">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="pname">Product Name</label>
               <input
@@ -102,17 +109,17 @@ export default function AddProduct() {
                 <option value="" hidden>
                   --Select--
                 </option>
-                <option value="cafe">Cafe</option>
-                <option value="electronics">Electronics</option>
-                <option value="toys">Toys</option>
-                <option value="mobile">Mobile</option>
-                <option value="fresh">Fresh</option>
-                <option value="home">Home</option>
-                <option value="beauty">Beauty</option>
+                <option value="Cafe">Cafe</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Toys">Toys</option>
+                <option value="Mobile">Mobile</option>
+                <option value="Fresh">Fresh</option>
+                <option value="Home">Home</option>
+                <option value="Beauty">Beauty</option>
               </select>
             </div>
             <div>
-              <label htmlFor="stock">Status</label>
+              <label htmlFor="status">Status</label>
               <select
                 id="status"
                 value={pDetails.status}
@@ -124,7 +131,7 @@ export default function AddProduct() {
                 <option value="Out Of Stock">Out Of Stock</option>
               </select>
             </div>
-            <label htmlFor="">Product Image</label>
+            <label htmlFor="pimage">Product Image</label>
             <div className="w-full shadow-inner shadow-gray-200 mt-2 py-1.5 px-2 rounded border border-gray-300">
               <input
                 type="file"
@@ -133,12 +140,15 @@ export default function AddProduct() {
                 className="file:cursor-pointer file:border file:border-gray-400 file:bg-gray-200 file:px-1 file:mr-2 active:file:bg-gray-300"
               />
             </div>
-            <button
-              onClick={handleSubmit}
-              className="px-5 py-1.5 bg-red-600 rounded text-white cursor-pointer active:bg-red-800"
-            >
-              Save Changes
-            </button>
+            {wait ? (
+              <button className="bg-red-500 rounded py-1.5 px-5 cursor-not-allowed text-gray-300 opacity-50">
+                Save Changes
+              </button>
+            ) : (
+              <button className="px-5 py-1.5 bg-red-600 rounded text-white cursor-pointer active:bg-red-700">
+                Save Changes
+              </button>
+            )}
           </form>
         </div>
       </div>

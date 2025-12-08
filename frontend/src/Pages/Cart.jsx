@@ -27,6 +27,7 @@ export default function Cart({ isOpen, setIsOpen }) {
   }, []);
 
   const handleCheckout = async () => {
+    if (wait) return;
     if (!userExists) {
       toast("Please login first", { icon: " ℹ️" });
       return navigate("/signin");

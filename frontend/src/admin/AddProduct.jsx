@@ -2,9 +2,10 @@ import { useState } from "react";
 import AdminNav from "./AdminNav";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-const backendUrl = import.meta.env.VITE_BACKEND_URL
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function AddProduct() {
+  const [wait, setWait] = useState(false);
   const [productDetails, setProductDetails] = useState({
     pname: "",
     price: "",
@@ -15,6 +16,8 @@ export default function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (wait) return;
+    setWait(true);
     const formData = new FormData();
     formData.append("pname", productDetails.pname);
     formData.append("price", productDetails.price);
@@ -29,6 +32,7 @@ export default function AddProduct() {
       });
       const data = await res.json();
       if (!data.ok) {
+        setWait(false);
         return toast.error(data.message || "Some error occurred");
       }
       toast.success(data.message || "Product Added Successfully");
@@ -40,6 +44,7 @@ export default function AddProduct() {
     } catch (error) {
       console.log("some error occured");
     }
+    setWait(false);
   };
 
   const handleChange = (e) => {
@@ -63,7 +68,11 @@ export default function AddProduct() {
           Back
         </button>
         <div className="shadow-lg px-4 py-6 rounded max-w-3xl mx-auto">
-          <form className="space-y-6" encType="multipart/form-data">
+          <form
+            className="space-y-6"
+            encType="multipart/form-data"
+            onSubmit={handleSubmit}
+          >
             <div>
               <label htmlFor="pname">Product Name</label>
               <input
@@ -116,12 +125,15 @@ export default function AddProduct() {
                 className="file:cursor-pointer file:border file:border-gray-400 file:bg-gray-200 file:px-1 file:mr-2 active:file:bg-gray-300"
               />
             </div>
-            <button
-              onClick={handleSubmit}
-              className="px-5 py-1.5 bg-red-600 rounded text-white cursor-pointer active:bg-red-800"
-            >
-              Add Product
-            </button>
+            {wait ? (
+              <button className="bg-red-500 rounded py-1.5 px-5 cursor-not-allowed text-gray-300 opacity-50">
+                Add Product
+              </button>
+            ) : (
+              <button className="px-5 py-1.5 bg-red-600 rounded text-white cursor-pointer active:bg-red-800">
+                Add Product
+              </button>
+            )}
           </form>
         </div>
       </div>

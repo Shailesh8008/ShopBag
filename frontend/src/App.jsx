@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HomePage from "./Pages/HomePage";
@@ -16,16 +16,9 @@ import QueryReply from "./admin/QueryReply";
 import Search from "./Pages/Search";
 import AdminRoute from "./components/AdminRoute";
 import Logout from "./components/Logout";
+import BackgroundElement from "./components/BackgroundElement";
 
 export default function App() {
-  const location = useLocation();
-  const path = location.state?.pathname;
-  let element = <></>;
-  if (path == "/search") {
-    element = <Search />;
-  } else {
-    element = <HomePage />;
-  }
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -38,7 +31,7 @@ export default function App() {
           element={
             <>
               <QueryPage isOpen={isOpen} setIsOpen={setIsOpen} />
-              {element}
+              <BackgroundElement />
             </>
           }
         />
@@ -47,7 +40,7 @@ export default function App() {
           element={
             <>
               <SigninPage isOpen={isOpen} setIsOpen={setIsOpen} />
-              <HomePage />
+              <BackgroundElement />
             </>
           }
         />
@@ -56,7 +49,7 @@ export default function App() {
           element={
             <>
               <Signup isOpen={isOpen} setIsOpen={setIsOpen} />
-              <HomePage />
+              <BackgroundElement />
             </>
           }
         />
@@ -65,7 +58,7 @@ export default function App() {
           element={
             <>
               <Cart isOpen={isOpen} setIsOpen={setIsOpen} />
-              {element}
+              <BackgroundElement />
             </>
           }
         />
@@ -123,7 +116,7 @@ export default function App() {
           element={
             <>
               <Logout isOpen={isOpen} setIsOpen={setIsOpen} />
-              <HomePage />
+              <BackgroundElement />
             </>
           }
         />
