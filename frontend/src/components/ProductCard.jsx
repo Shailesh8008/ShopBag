@@ -28,7 +28,7 @@ export default function ProductCard({ products }) {
           >
             <div className="mb-2">
               <img
-                src={`${backendUrl}/uploads/${el.pimage}`}
+                src={el.pimage}
                 alt={el.pimage}
                 className="w-full h-40 object-contain rounded-md border border-gray-300 bg-white"
               />

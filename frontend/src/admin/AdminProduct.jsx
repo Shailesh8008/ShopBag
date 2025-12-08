@@ -65,7 +65,7 @@ export default function AdminProduct() {
                   className="shadow rounded-xl hover:shadow-lg border border-gray-100 p-4"
                 >
                   <img
-                    src={`${backendUrl}/uploads/${e.pimage}`}
+                    src={e.pimage}
                     alt={e.pimage}
                     className="w-full h-50 object-contain justify-self-center rounded-md border border-gray-300"
                   />

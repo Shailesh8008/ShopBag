@@ -1,23 +1,30 @@
 const model = require("../models/product");
 const queryModel = require("../models/query");
 const nodemailer = require("nodemailer");
+const imageKit = require("../config/imageKit");
 
 const checkAdmin = (req, res) => res.json({ ok: true });
 
 const addproduct = async (req, res) => {
   try {
     const { pname, price, category } = req.body;
-    const { filename } = req.file;
-    if (!pname || !price || !category) {
+    if (!pname || !price || !category || !req.file) {
       return res.json({ ok: false, message: "All fields are required!" });
     }
+    const { buffer, originalname } = req.file;
+
+    const uploadImage = await imageKit.upload({
+      file: buffer,
+      fileName: `${Date.now()}-${originalname}`,
+      folder: "/products",
+    });
 
     const record = new model({
       pname: pname,
       price: price,
       category: category,
       status: "In Stock",
-      pimage: filename,
+      pimage: uploadImage.url,
     });
     await record.save();
     return res.json({ ok: true, message: "Product added successfully" });
