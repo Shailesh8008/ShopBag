@@ -43,7 +43,7 @@ export default function ProductCard({ products }) {
             </p>
             <div className="text-center">
               <button
-                className="border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-semibold rounded-md py-1.5 px-3 active:bg-purple-800 active:border-purple-800 transition-all cursor-pointer"
+                className="border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-semibold rounded-md py-1.5 px-3 active:bg-purple-800 active:border-purple-800 active:text-white transition-all cursor-pointer"
                 onClick={() => handleAddItem(el)}
               >
                 Add to Cart

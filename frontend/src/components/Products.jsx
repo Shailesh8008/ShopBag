@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import Category from "./Category";
 import ProductCard from "./ProductCard";
-const backendUrl = import.meta.env.VITE_BACKEND_URL
+import {
+  ShimmerButton,
+  ShimmerPostList,
+  ShimmerSectionHeader,
+  ShimmerText,
+  ShimmerThumbnail,
+  ShimmerTitle,
+} from "react-shimmer-effects";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -37,7 +45,44 @@ export default function Products() {
           Products
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 px-3 sm:px-8 gap-5">
-          <ProductCard products={filteredProducts} />
+          {products.length !== 0 ? (
+            <ProductCard products={filteredProducts} />
+          ) : (
+            [1, 2, 3, 4, 5].map((el) => (
+              <div
+                key={el}
+                className="max-w-[16rem] bg-white shadow-lg px-4 py-4 rounded-md"
+              >
+                <ShimmerThumbnail height={160} className="rounded-md mb-10" />
+                <ShimmerThumbnail
+                  height={15}
+                  width={28}
+                  className="rounded-lg mb-0"
+                />
+                <ShimmerThumbnail
+                  height={15}
+                  width={28}
+                  className="rounded-lg mb-0"
+                />
+                <ShimmerThumbnail
+                  height={15}
+                  width={28}
+                  className="rounded-lg mb-0"
+                />
+                <div className="mt-2">
+                  <ShimmerText line={2} gap={10} className="mb-0" />
+                </div>
+                <div className="mt-4">
+                  <ShimmerThumbnail
+                    height={40}
+                    width={112}
+                    className="rounded-md m-0"
+                    center
+                  />
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </section>
     </>

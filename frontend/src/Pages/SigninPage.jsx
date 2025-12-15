@@ -1,14 +1,16 @@
 import { useState } from "react";
 import Modal from "../components/Modal";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/AuthSlice";
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function SigninPage({ isOpen, setIsOpen }) {
+  const [wait, setWait] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const [isPass, setIsPass] = useState(false);
   const [form, setForm] = useState({
@@ -20,6 +22,7 @@ export default function SigninPage({ isOpen, setIsOpen }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setWait(true);
     if (!form.email || !form.pass) {
       return setError({
         email: form.email ? false : true,
@@ -45,6 +48,7 @@ export default function SigninPage({ isOpen, setIsOpen }) {
     } catch (error) {
       toast.error("Something went wrong");
     }
+    setWait(false);
   };
 
   const handleChange = (e) => {
@@ -65,7 +69,11 @@ export default function SigninPage({ isOpen, setIsOpen }) {
         <div className="text-center">
           <p>
             Don't have an account?{" "}
-            <Link to={"/signup"} className="text-blue-700 hover:underline">
+            <Link
+              to={"/signup"}
+              state={location}
+              className="text-blue-700 hover:underline"
+            >
               Sign up
             </Link>
           </p>
@@ -125,9 +133,15 @@ export default function SigninPage({ isOpen, setIsOpen }) {
             )}
           </div>
         </div>
-        <button className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 w-full cursor-pointer transition active:bg-purple-800 active:text-white">
-          Sign In
-        </button>
+        {wait ? (
+          <div className="flex px-3 py-1 w-full rounded-xl cursor-not-allowed border border-purple-600 justify-center">
+            <div className="h-8 w-8 border-4 border-dotted border-t-4 border-transparent border-t-purple-600 rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <button className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 w-full cursor-pointer transition active:bg-purple-800 active:text-white">
+            Sign In
+          </button>
+        )}
       </form>
     </Modal>
   );

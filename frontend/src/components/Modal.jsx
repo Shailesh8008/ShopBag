@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Modal({
   isOpen,
@@ -10,13 +10,14 @@ export default function Modal({
   height = "",
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return createPortal(
     <>
       <div
         onClick={(e) => {
           setIsOpen(false);
-          navigate("/");
+          location.pathname === "/signup" ? navigate("/") : navigate(-1);
         }}
         className={`fixed inset-0 backdrop-blur-xs bg-gray-400/25 w-full h-full content-center px-4 ${
           isOpen ? "" : "hidden"

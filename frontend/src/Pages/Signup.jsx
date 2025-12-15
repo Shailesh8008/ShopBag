@@ -1,11 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import Modal from "../components/Modal";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-const backendUrl = import.meta.env.VITE_BACKEND_URL
+import { IoCloseCircleOutline } from "react-icons/io5";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function Signup({ isOpen, setIsOpen }) {
+  const [wait, setWait] = useState(false);
+  const location = useLocation();
   const [form, setForm] = useState({
     fname: "",
     lname: "",
@@ -48,6 +51,7 @@ export default function Signup({ isOpen, setIsOpen }) {
 
     if (form.pass1 !== form.pass2) return setError({ ...error, pass: true });
 
+    setWait(true);
     try {
       const res = await fetch(`${backendUrl}/api/reg`, {
         method: "POST",
@@ -69,18 +73,32 @@ export default function Signup({ isOpen, setIsOpen }) {
     } catch (error) {
       console.log("error: ", error);
     }
+    setWait(false);
   };
 
   return (
     <Modal
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      header={<h1 className="font-semibold text-center text-xl">Register</h1>}
+      header={
+        <>
+          <div className="w-full">
+            <Link to={"/"}>
+              <IoCloseCircleOutline className="text-red-600 text-3xl -mb-1 place-self-end cursor-pointer active:scale-90" />
+            </Link>
+            <h1 className="font-semibold text-center text-xl">Register</h1>
+          </div>
+        </>
+      }
       footer={
         <div className="text-center">
           <p>
             Have an account?{" "}
-            <Link to={"/signin"} className="text-blue-700 hover:underline">
+            <Link
+              to={"/signin"}
+              state={location}
+              className="text-blue-700 hover:underline"
+            >
               Sign In
             </Link>
           </p>
@@ -196,9 +214,15 @@ export default function Signup({ isOpen, setIsOpen }) {
             />
           </div>
         </div>
-        <button className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 mt-4 w-full cursor-pointer transition active:bg-purple-800">
-          Sign Up
-        </button>
+        {wait ? (
+          <div className="flex px-3 py-1 mt-6.5 w-full rounded-xl cursor-not-allowed border border-purple-600 justify-center">
+            <div className="h-8 w-8 border-4 border-dotted border-t-4 border-transparent border-t-purple-600 rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <button className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 mt-4 w-full cursor-pointer transition active:bg-purple-700 active:text-white">
+            Sign Up
+          </button>
+        )}
       </form>
     </Modal>
   );
