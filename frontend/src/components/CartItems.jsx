@@ -19,13 +19,14 @@ export default function CartItems({ pid, pname, img, price, qt }) {
   };
 
   return (
-    <li className="flex gap-2 items-center font-semibold py-2">
+    <li className="flex gap-0.5 sm:gap-2 items-center font-semibold py-2">
       <Link>
-        <img className="w-20 h-12 object-contain" src={img} alt="" />
+        <img className="m-w-20 h-12 object-contain" src={img} alt="" />
       </Link>
-      <h2 className="flex-1">{pname}</h2>
-
-      <p className="text-green-600">₹ {price}</p>
+      <div className="sm:flex flex-1 justify-between">
+        <h2 className="">{pname}</h2>
+        <p className="text-green-600">₹ {price}</p>
+      </div>
       <div className="flex gap-2">
         <button
           className="bg-purple-500/70 rounded p-1.5 active:bg-purple-500 flex justify-center items-center text-sm cursor-pointer"

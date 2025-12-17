@@ -156,15 +156,27 @@ export default function Navbar({ setIsOpen }) {
                   <LuMessageSquareMore />
                   <span>Query</span>
                 </Link>
-                <Link
-                  to={"/signin"}
-                  state={location}
-                  className="flex text-center cursor-pointer items-center space-x-1"
-                  onClick={(e) => setIsOpen(true)}
-                >
-                  <FaRegUserCircle />
-                  <span>Sign In</span>
-                </Link>
+                {authState.user ? (
+                  <Link
+                    to={"/logout"}
+                    state={location}
+                    className="flex text-center cursor-pointer items-center space-x-1"
+                    onClick={(e) => setIsOpen(true)}
+                  >
+                    <FiLogOut />
+                    <span>Logout</span>
+                  </Link>
+                ) : (
+                  <Link
+                    to={"/signin"}
+                    state={location}
+                    className="flex text-center cursor-pointer items-center space-x-1"
+                    onClick={(e) => setIsOpen(true)}
+                  >
+                    <FaRegUserCircle />
+                    <span>Sign In</span>
+                  </Link>
+                )}
               </div>
             )}
           </div>

@@ -27,7 +27,7 @@ export default function Modal({
           onClick={(e) => e.stopPropagation()}
           className={`${
             height == "cart" ? "max-h-3/4" : height
-          } max-w-2xl bg-white mx-auto px-6 pt-5 pb-3 shadow-2xl rounded-lg scrollbar-thin scrollbar-thumb-purple-400 scrollbar-track-purple-100 scrollbar-active:scrollbar-thumb-purple-500 overflow-y-auto`}
+          } max-w-2xl bg-white mx-auto px-2 sm:px-6 pt-5 pb-3 shadow-2xl rounded-lg scrollbar-thin scrollbar-thumb-purple-400 scrollbar-track-purple-100 scrollbar-active:scrollbar-thumb-purple-500 overflow-y-auto`}
         >
           {header}
           {children}
