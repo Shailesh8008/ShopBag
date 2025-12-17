@@ -67,8 +67,8 @@ cd backend
 npm install
 ```
 
-Create .env file in backend directory and write your own credentials
-You can choose *dev* for development and *prod* for production for **ENV** variable
+Create .env file in backend directory and replace values with your own credentials.
+You can choose *dev* for development and *prod* for production in the value of **ENV** variable
 
 ```bash
 DB=your_connection_string
@@ -86,8 +86,16 @@ FRONTEND_URL=http://localhost:5173
 
 Terminal
 
+- To run in Development Environment
+
 ```bash
 npm run server
+```
+
+- To run in Production Environment
+
+```bash
+npm start
 ```
 
 Backend will be running at: [http://localhost:5000](http://localhost:5000)
@@ -101,8 +109,7 @@ cd frontend
 npm install
 ```
 
-Create .env file in frontend directory and fill required credentials
-Just fill your razorpay_id, created while setting up backend
+Create .env file in frontend directory and just fill your razorpay_id which you created while setting up backend
 
 ```bash
 VITE_RAZORPAY_ID=your_razorpay_id_same_as_backend
@@ -111,8 +118,16 @@ VITE_BACKEND_URL=http://localhost:5000
 
 Terminal
 
+- To run in Development Environment
+
 ```bash
 npm run dev
+```
+
+- To run in Production Environment
+
+```bash
+npm run build
 ```
 
 Frontend will be running at: [http://localhost:5173](http://localhost:5173)
