@@ -4,6 +4,7 @@ const adminController = require("../controllers/admin");
 const { uploads } = require("../middleware/multer");
 const { auth, adminAuth } = require("../middleware/auth");
 
+apiRouter.get("/health", (req, res) => res.json({ response: "ok" }));
 apiRouter.post("/api/reg", userController.reg);
 apiRouter.post("/api/login", userController.login);
 apiRouter.post(
