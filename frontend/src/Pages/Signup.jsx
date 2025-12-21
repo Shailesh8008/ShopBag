@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import Modal from "../components/Modal";
 import { useState } from "react";
@@ -9,6 +9,7 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 export default function Signup({ isOpen, setIsOpen }) {
   const [wait, setWait] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     fname: "",
     lname: "",
@@ -35,23 +36,28 @@ export default function Signup({ isOpen, setIsOpen }) {
   const handleForm = async (e) => {
     e.preventDefault();
 
+    setWait(true);
     if (!form.fname || !form.email || !form.pass1 || !form.pass2) {
-      return setError({
+      setError({
         ...error,
         fname: form.fname ? false : true,
         email: form.email ? false : true,
         pass1: form.pass1 ? false : true,
         pass2: form.pass2 ? false : true,
       });
+      return setWait(false);
     }
 
     if (!isValidEmail(form.email)) {
-      return toast.error("Please enter a valid email");
+      toast.error("Please enter a valid email");
+      return setWait(false);
     }
 
-    if (form.pass1 !== form.pass2) return setError({ ...error, pass: true });
+    if (form.pass1 !== form.pass2) {
+      setError({ ...error, pass: true });
+      return setWait(false);
+    }
 
-    setWait(true);
     try {
       const res = await fetch(`${backendUrl}/api/reg`, {
         method: "POST",
@@ -60,7 +66,8 @@ export default function Signup({ isOpen, setIsOpen }) {
       });
       const data = await res.json();
       if (!data.ok) {
-        return toast.error(data.message || "Some error occurred");
+        toast.error(data.message || "Some error occurred");
+        return setWait(false);
       }
       toast.success(data.message || "Registered Successfully");
       setForm({
@@ -70,10 +77,11 @@ export default function Signup({ isOpen, setIsOpen }) {
         pass1: "",
         pass2: "",
       });
+      navigate("/signin");
     } catch (error) {
+      setWait(false);
       console.log("error: ", error);
     }
-    setWait(false);
   };
 
   return (
@@ -84,7 +92,7 @@ export default function Signup({ isOpen, setIsOpen }) {
         <>
           <div className="w-full">
             <Link to={"/"}>
-              <IoCloseCircleOutline className="text-red-600 text-3xl -mb-1 place-self-end cursor-pointer active:scale-90" />
+              <IoCloseCircleOutline className="text-red-600 text-3xl sm:-me-2.5 sm:-mt-2 -mt-3 -mb-1 place-self-end cursor-pointer active:scale-90" />
             </Link>
             <h1 className="font-semibold text-center text-xl">Register</h1>
           </div>
@@ -105,7 +113,10 @@ export default function Signup({ isOpen, setIsOpen }) {
         </div>
       }
     >
-      <form className="mb-2 mt-4 w-full space-y-2.5" onSubmit={handleForm}>
+      <form
+        className="mb-2 mt-4 w-full space-y-2.5 px-1 sm:px-0"
+        onSubmit={handleForm}
+      >
         <div className="flex gap-2 sm:gap-3">
           <div className="flex-1">
             <label htmlFor="fname" className="text-lg block ml-0.5">

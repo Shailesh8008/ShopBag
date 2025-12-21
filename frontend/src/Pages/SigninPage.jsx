@@ -24,10 +24,11 @@ export default function SigninPage({ isOpen, setIsOpen }) {
 
     setWait(true);
     if (!form.email || !form.pass) {
-      return setError({
+      setError({
         email: form.email ? false : true,
         pass: form.pass ? false : true,
       });
+      return setWait(false);
     }
 
     try {
@@ -39,16 +40,17 @@ export default function SigninPage({ isOpen, setIsOpen }) {
       });
       const data = await res.json();
       if (!data.ok) {
-        return toast.error(data.message);
+        toast.error(data.message);
+        return setWait(false);
       }
       dispatch(setUser({ user: data.userId }));
       toast.success(data.message);
       setIsOpen(false);
       navigate("/");
     } catch (error) {
-      toast.error("Something went wrong");
+      setWait(false);
+      return toast.error("Something went wrong");
     }
-    setWait(false);
   };
 
   const handleChange = (e) => {
