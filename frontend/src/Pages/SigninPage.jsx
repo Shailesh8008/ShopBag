@@ -73,7 +73,7 @@ export default function SigninPage({ isOpen, setIsOpen }) {
             Don't have an account?{" "}
             <Link
               to={"/signup"}
-              state={location}
+              state={location.state}
               className="text-blue-700 hover:underline"
             >
               Sign up

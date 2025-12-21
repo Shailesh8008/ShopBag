@@ -91,7 +91,7 @@ export default function Signup({ isOpen, setIsOpen }) {
       header={
         <>
           <div className="w-full">
-            <Link to={"/"}>
+            <Link to={location.state.pathname}>
               <IoCloseCircleOutline className="text-red-600 text-3xl sm:-me-2.5 sm:-mt-2 -mt-3 -mb-1 place-self-end cursor-pointer active:scale-90" />
             </Link>
             <h1 className="font-semibold text-center text-xl">Register</h1>
@@ -104,7 +104,7 @@ export default function Signup({ isOpen, setIsOpen }) {
             Have an account?{" "}
             <Link
               to={"/signin"}
-              state={location}
+              state={location.state}
               className="text-blue-700 hover:underline"
             >
               Sign In

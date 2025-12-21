@@ -5,6 +5,6 @@ import HomePage from "../Pages/HomePage";
 export default function BackgroundElement() {
   const location = useLocation();
   const path = location.state?.pathname;
-  if (path.includes("/search")) return <Search />;
+  if (path?.includes("/search")) return <Search />;
   return <HomePage />;
 }

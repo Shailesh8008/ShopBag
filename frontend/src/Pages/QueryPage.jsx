@@ -2,9 +2,11 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import { useState } from "react";
 import toast from "react-hot-toast";
-const backendUrl = import.meta.env.VITE_BACKEND_URL
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function QueryPage({ isOpen, setIsOpen }) {
+  const [wait, setWait] = useState(false);
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -14,6 +16,8 @@ export default function QueryPage({ isOpen, setIsOpen }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setWait(true);
     try {
       const res = await fetch(`${backendUrl}/api/submitquery`, {
         method: "POST",
@@ -22,15 +26,16 @@ export default function QueryPage({ isOpen, setIsOpen }) {
       });
       const data = await res.json();
       if (!data.ok) {
+        setWait(false);
         return toast.error(data.message);
       }
       toast.success(data.message);
+      setWait(false);
     } catch (error) {
+      setWait(false);
       toast.error("Internal server error");
     }
     setFormData({ username: "", email: "", query: "" });
-    navigate(-1);
-    setIsOpen(false);
   };
 
   const handleChange = (e) =>
@@ -70,9 +75,15 @@ export default function QueryPage({ isOpen, setIsOpen }) {
           className="w-full px-3 py-2 border border-purple-200 rounded focus:outline-none focus:ring-1 focus:ring-purple-600"
           rows="3"
         ></textarea>
-        <button className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 w-full cursor-pointer transition active:bg-purple-700 active:text-white font-semibold">
-          Submit
-        </button>
+        {wait ? (
+          <div className="flex px-3 py-1 w-full rounded-xl cursor-not-allowed border border-purple-600 justify-center">
+            <div className="h-8 w-8 border-4 border-dotted border-t-4 border-transparent border-t-purple-600 rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <button className="hover:bg-purple-600 hover:text-white border border-purple-600 text-purple-600 rounded-xl px-3 py-2 w-full cursor-pointer transition active:bg-purple-700 active:text-white font-semibold">
+            Submit
+          </button>
+        )}
       </form>
     </Modal>
   );

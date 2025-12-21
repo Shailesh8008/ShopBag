@@ -11,13 +11,14 @@ export default function Modal({
 }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const path = location?.state?.pathname;
 
   return createPortal(
     <>
       <div
         onClick={(e) => {
           setIsOpen(false);
-          location.pathname === "/signup" ? navigate("/") : navigate(-1);
+          path ? navigate(path) : navigate("/");
         }}
         className={`fixed inset-0 backdrop-blur-xs bg-gray-400/25 w-full h-full content-center px-4 ${
           isOpen ? "" : "hidden"

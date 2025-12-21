@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authenticateUser } from "../../store/slices/AuthSlice";
 import { FiLogOut } from "react-icons/fi";
+import logo from "../assets/shopbagLogo.png";
 
 export default function Navbar({ setIsOpen }) {
   const authState = useSelector((state) => state.auth);
@@ -37,7 +38,9 @@ export default function Navbar({ setIsOpen }) {
       {!path.includes("/admin/") ? (
         <nav className="w-full shadow h-16 py-3 sm:px-6 px-4 bg-gradient-to-r from-purple-100 via-white to-white content-center">
           <div className="flex items-center relative justify-between max-w-7xl">
-            <h1>ShopBag</h1>
+            <Link to={"/"}>
+              <img src={logo} alt="" className="h-10 sm:h-12" />
+            </Link>
             <div className="flex-1 mx-4">
               <div className="relative">
                 {path != "/search" ? (

@@ -6,7 +6,7 @@ import { ImExit } from "react-icons/im";
 
 export default function AdminNav() {
   return (
-    <div className="bg-gray-800 text-white space-y-5 w-60 p-6">
+    <div className="bg-gray-800 text-white space-y-5 max-w-60 p-6">
       <h1 className="text-lg font-bold cursor-default">ADMIN PANEL</h1>
       <nav className="space-y-3">
         <Link to={"/admin/dashboard"} className="block hover:text-green-500">
