@@ -155,12 +155,12 @@ const queryReply = async (req, res) => {
       port: 587,
       secure: false,
       auth: {
-        user: "shailesh10thd1@gmail.com",
+        user: process.env.ADMIN_EMAIL,
         pass: process.env.SMTP_PASS,
       },
     });
     const info = await transporter.sendMail({
-      from: '"ShopBag" <shailesh10thd1@gmail.com>',
+      from: `"ShopBag" <${process.env.ADMIN_EMAIL}>`,
       to: to,
       subject: sub,
       text: reply,

@@ -19,15 +19,16 @@ app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
 const createDefaultAdmin = async () => {
   const isAdminExists = await userModel.findOne({
-    email: "shailesh10thd1@gmail.com",
+    email: process.env.ADMIN_EMAIL,
     role: "admin",
   });
   if (isAdminExists) return;
+  const adminName = process.env.ADMIN_NAME.split(" ");
   const hashedPass = await bcrypt.hash(process.env.ADMIN_PASS, 10);
   const rec = new userModel({
-    fname: "Shailesh",
-    lname: "Sharma",
-    email: "shailesh10thd1@gmail.com",
+    fname: adminName[0] ? adminName[0] : "admin",
+    lname: adminName[1] ? adminName[1] : "",
+    email: process.env.ADMIN_EMAIL,
     pass: hashedPass,
     role: "admin",
   });
